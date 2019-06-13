@@ -1,0 +1,12 @@
+/** Initialize the whole game here */
+package Init
+import Grid
+import MapGen
+import MapConstants
+
+init
+  initGrid()
+    
+  // gen map
+  let map = generateMap(coord(5, 5))
+  applyMapToGrid(map)

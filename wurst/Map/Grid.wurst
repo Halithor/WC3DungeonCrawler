@@ -1,0 +1,72 @@
+package Grid
+import MapConstants
+import MapGen
+
+public GridCell array[100] grid
+
+public function getRoom(int x, int y) returns GridCell
+  return grid[(y * MAP_COLS) + x]
+
+public function getContainingRoom(vec2 pos) returns GridCell
+  let x = ((pos.x / ROOM_SIZE) + (MAP_COLS / 2)).floor()
+  let y = ((pos.y / ROOM_SIZE) + (MAP_ROWS / 2)).floor()
+  return getRoom(x, y)
+
+function setGateState(destructable gate, bool isOpen)
+  if isOpen
+    ModifyGateBJ(bj_GATEOPERATION_OPEN, gate)
+  else
+    ModifyGateBJ(bj_GATEOPERATION_CLOSE, gate)
+
+public class GridCell
+  coord site
+  vec2 center
+  rect area  
+
+  destructable gate_north
+  destructable gate_south
+  destructable gate_east
+  destructable gate_west  
+
+  construct(coord site)
+    this.site = site
+    this.center = MAP_CENTER + 
+        vec2(((this.site.x - 5.0) * ROOM_SIZE) + ROOM_HALF, 
+        ((this.site.y - 5.0) * ROOM_SIZE) + ROOM_HALF)
+    this.area = Rect(center.x - ROOM_HALF, center.y - ROOM_HALF, 
+        center.x + ROOM_HALF, center.y + ROOM_HALF)
+    // createTTEx(center.toVec3(), "(" + this.site.x.toString() + ", " + this.site.y.toString() + ")", 14)
+
+  function represent(MapRoom room)
+    setGateState(gate_north, room.isNorthOpen)
+    setGateState(gate_south, room.isSouthOpen)
+    setGateState(gate_east, room.isEastOpen)
+    setGateState(gate_west, room.isWestOpen)
+    createTTEx(center.toVec3(), room.toString(), 14)
+    createUnit(players[room.status == Status.Start ? 1 : 2], 
+        room.isStart or room.isFinish ? 'Hpal' : 'hfoo', this.center, (0).asAngleDegrees())
+    
+// Take a given generated map and represent it in the grid.    
+public function applyMapToGrid(Map map)
+  print("ApplyingMap: Start@" + map.start.toString() + " | Finish@" + map.finish.toString())
+  for y = 0 to map.size.y - 1
+    for x = 0 to map.size.x - 1
+      getRoom(x,y).represent(map.getRoom(coord(x, y)))
+
+public function initGrid()
+  // Initialize the rooms
+  for y = 0 to MAP_ROWS - 1
+    for x = 0 to MAP_COLS - 1
+      let room = new GridCell(coord(x, y))
+      if (y > 0)
+        let gate = createDestructable(kDID_WALL_HORZ, room.center - vec2(0, ROOM_HALF), (270).asAngleDegrees(), 0.8, 0)
+        room.gate_south = gate
+        getRoom(x, y - 1).gate_north = gate
+      if (x > 0)
+        let gate = createDestructable(kDID_WALL_VERT, room.center - vec2(ROOM_HALF, 0), (270).asAngleDegrees(), 0.8, 0)
+        room.gate_west = gate
+        getRoom(y, x - 1).gate_east = gate
+
+      grid[(y * MAP_COLS) + x] = room
+
+        

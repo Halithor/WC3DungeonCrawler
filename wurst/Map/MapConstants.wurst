@@ -1,0 +1,20 @@
+package MapConstants
+
+public constant MAP_CENTER = vec2(0, 0)
+public constant ROOM_SIZE = 1024.0
+public constant ROOM_HALF = 512.0
+
+public constant MAP_ROWS = 10
+public constant MAP_COLS = 10
+
+public constant kDID_WALL_HORZ = 'B000'
+public constant kDID_WALL_VERT = 'B001'
+
+// Tuple for a integer coordinate
+public tuple coord(int x, int y)
+
+public function coord.op_plus(coord v) returns coord
+	return coord(this.x + v.x, this.y + v.y)
+
+public function coord.toString() returns string
+	return "(" + this.x.toString() + ", " + this.y.toString() + ")"

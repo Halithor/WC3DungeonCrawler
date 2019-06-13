@@ -1,0 +1,34 @@
+package hero_adventurer
+
+import hero_globals
+import UnitObjEditing
+import hero_utils
+import Units
+import Soundsets
+// This is the basic hero that everyone starts the game with. This hero is a
+// basic dude who punches stuff. He will have a minimum set of abilities for 
+// a player to start with, but at level 5 he will be able to select a primary
+// class, which will change what he can do.
+
+public function generateAdventurer()
+  HeroDefinition def = GetCleanHeroDef(HERO_CLASS_ID_ADVENTURER)
+  def.setAttack1AttackType(AttackType.Normal)        
+  def.setName("Adventurer")
+  def.setProperNames("Adventurer")
+  def.setArmorType(ArmorType.Unarmored)
+  def.setModelFile(Units.villagerMan)
+  def.setUnitSoundSet(Soundsets.villagerMan)
+  def.setCollisionSize(16.0)
+  def.setSelectionScale(1)
+  def.setPrimaryAttribute("AGI")
+  def.setStartingAgility(5)
+  def.setStartingIntelligence(5)
+  def.setStartingStrength(5)
+        
+
+
+@compiletime function gen()
+  generateAdventurer()
+
+init 
+  gen()

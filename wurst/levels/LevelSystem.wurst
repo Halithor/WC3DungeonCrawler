@@ -1,0 +1,13 @@
+package LevelSystem
+
+public class LevelSystem
+  int currentLevel = 0
+
+  // Initializes the level system.
+  function start()
+    //
+    
+  function endLevel()
+    // cleanup the mobs, items, etc
+    // cleanup traps
+    skip

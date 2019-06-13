@@ -1,0 +1,283 @@
+package ItemGlobals
+
+import HashMap
+
+constant ITEM_UID_GEN = new IdGenerator('0000')
+HashMap<int, ItemInfo> itemInfos = new HashMap<int, ItemInfo>()
+
+public constant string ColorAttributeColor = "|cff3B97D3"
+public constant string ColorSubDetail = "|cffaaaaaa"
+public constant string ColorHightlight = "|cffffcc00"
+public constant string ColorFlavor = "|cff8888aa"
+
+public enum ItemRarity
+    Common
+    Uncommon
+    Rare
+    Unique
+    Legendary
+
+public enum ItemType
+    Equipment
+    Consumable
+
+public enum EquipmentType
+    Weapon
+    Offhand
+    Feet
+    Head
+    Hands
+    Body
+    Accessory
+
+public enum WeaponType
+    Dagger
+    Handaxe
+    Hammer
+    Mace
+    Spear
+    Shortbow
+    LightCrossbow
+    Rapier
+    Battleaxe
+    Shortsword
+    Maul
+    Greataxe
+    Greatsword
+    Warhammer
+    Halbred
+    Longbow
+    HandCrossbow
+    HeavyCrossbow
+    Wand
+    Staff
+
+public enum WeaponClassification
+    SimpleMelee
+    SimpleRanged
+    MartialMelee
+    MartialRanged
+    Magical
+
+public enum WeaponHandRequirement
+    OneHand
+    TwoHand
+
+public enum ConsumableType
+    Potion
+    Scroll
+
+public function item.getItemInfo() returns ItemInfo
+    return itemInfos.get(GetItemTypeId(this))
+
+public function item.hasItemInfo() returns bool
+    return itemInfos.has(GetItemTypeId(this))
+
+public class ItemInfo
+    // Could be useful to know the ID
+    int itm
+    int level
+    
+    ItemType typ
+    ItemRarity rarity
+
+    construct(item itm, int level, ItemType typ, ItemRarity rarity)
+        this.level = level
+        this.itm = itm
+        this.typ = typ
+        this.rarity = rarity
+
+        itemInfos.put(id, this)
+
+public function ItemRarity.getColorString() returns string
+    switch this
+        case Common
+            return ""
+        case Uncommon
+            return "|cff0066ff"
+        case Rare
+            return "|cff33cc33"
+        case Unique
+            return "|cffff9933"
+        case Legendary
+            return "|cffcc3399"
+        default
+            return ""
+
+public function ItemRarity.getTintingColor() returns color
+    switch this
+        case Common
+            return color(255, 255, 255)
+        case Uncommon
+            return color(0, 102, 204)
+        case Rare
+            return color(51, 204, 51)
+        case Unique
+            return color(255,153,51)
+        case Legendary
+            return color(204, 51, 153)
+        default
+            return color(255, 255, 255)
+
+public function ItemRarity.toString() returns string
+    switch this
+        case Common
+            return "Common"
+        case Uncommon
+            return "Uncommon"
+        case Rare
+            return "Rare"
+        case Unique
+            return "Unique"
+        case Legendary
+            return "Legendary"
+        default
+            return "DEFAULT RARITY"
+
+public function EquipmentType.toString() returns string
+    switch this
+        case Weapon
+            return "Weapon"
+        case Offhand
+            return "Offhand"
+        case Feet
+            return "Boots"
+        case Head
+            return "Helm"
+        case Hands
+            return "Gloves"
+        case Body
+            return "Body"
+        case Accessory
+            return "Accessory"
+        default
+            return "DEFAULT EQUIPMENT TYPE"
+
+public function WeaponType.toString() returns string
+    switch this
+        case Dagger
+            return "Dagger"
+        case Handaxe
+            return "Handaxe"
+        case Hammer
+            return "Hammer"
+        case Mace
+            return "Mace"
+        case Spear
+            return "Spear"
+        case Shortbow
+            return "Shortbow"
+        case LightCrossbow
+            return "Light Crossbow"
+        case Rapier
+            return "Rapier"
+        case Battleaxe
+            return "Battleaxe"
+        case Shortsword
+            return "Shortsword"
+        case Maul
+            return "Maul"
+        case Greataxe
+            return "Greataxe"
+        case Greatsword
+            return "Greatsword"
+        case Warhammer
+            return "Warhammer"
+        case Halbred
+            return "Halbred"
+        case Longbow
+            return "Longbow"
+        case HandCrossbow
+            return "Hand Crossbow"
+        case HeavyCrossbow
+            return "Heavy Crossbow"
+        case Wand         
+            return "Wand"
+        case Staff
+            return "Staff"
+        default
+            return "DEFAULT WEAPON TYPE"
+
+public function WeaponClassification.toString() returns string
+    switch this
+        case SimpleMelee
+            return "SM"
+        case SimpleRanged
+            return "SR"
+        case MartialMelee
+            return "MM"
+        case MartialRanged
+            return "MR"
+        case Magical
+            return "MAG"
+        default
+            return "DEFAULT CLASSIFICATION"
+
+public function WeaponHandRequirement.toString() returns string
+    switch this
+        case OneHand
+            return "1H"
+        case TwoHand
+            return "2H"
+        default
+            return "UNKNOWN HANDS"
+        
+
+public function WeaponType.getClassification() returns WeaponClassification
+    switch this
+        case Dagger
+            return WeaponClassification.SimpleMelee
+        case Handaxe
+            return WeaponClassification.SimpleMelee
+        case Hammer
+            return WeaponClassification.SimpleMelee
+        case Mace
+            return WeaponClassification.SimpleMelee
+        case Spear
+            return WeaponClassification.SimpleMelee
+        case Shortbow
+            return WeaponClassification.SimpleRanged
+        case LightCrossbow
+            return WeaponClassification.SimpleRanged
+        case Rapier
+            return WeaponClassification.MartialMelee
+        case Battleaxe
+            return WeaponClassification.MartialMelee
+        case Shortsword
+            return WeaponClassification.MartialMelee
+        case Maul
+            return WeaponClassification.MartialMelee
+        case Greataxe
+            return WeaponClassification.MartialMelee
+        case Greatsword
+            return WeaponClassification.MartialMelee
+        case Warhammer
+            return WeaponClassification.MartialMelee
+        case Halbred
+            return WeaponClassification.MartialMelee
+        case Longbow
+            return WeaponClassification.MartialRanged
+        case HandCrossbow
+            return WeaponClassification.MartialRanged
+        case HeavyCrossbow
+            return WeaponClassification.MartialRanged
+        case Wand
+            return WeaponClassification.Magical
+        case Staff
+            return WeaponClassification.Magical
+        default
+            return WeaponClassification.SimpleMelee
+
+public function WeaponType.getHandsRequirement() returns WeaponHandRequirement
+    if this == WeaponType.Shortbow or
+            this == WeaponType.LightCrossbow or
+            this == WeaponType.Greataxe or
+            this == WeaponType.Greatsword or
+            this == WeaponType.Warhammer or
+            this == WeaponType.Halbred or
+            this == WeaponType.Longbow or
+            this == WeaponType.HeavyCrossbow or
+            this == WeaponType.Staff
+        return WeaponHandRequirement.TwoHand
+    return WeaponHandRequirement.OneHand    
+

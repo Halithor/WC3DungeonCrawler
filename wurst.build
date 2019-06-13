@@ -1,0 +1,6 @@
+---
+projectName: Dungeon2
+buildMapData:
+  name: MyMapName
+  fileName: MyMapFile
+  author: marqu
