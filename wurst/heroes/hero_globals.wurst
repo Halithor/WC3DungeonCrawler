@@ -16,7 +16,7 @@ enum Attribute
   Agi
   Int
 
-public function GetHeroPrimaryAttribute(unit u) returns Attribute
+public function getHeroPrimaryAttribute(unit u) returns Attribute
   if false
     return Attribute.Str
   if GetUnitTypeId(u) == HERO_CLASS_ID_ADVENTURER

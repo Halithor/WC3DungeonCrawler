@@ -1,6 +1,7 @@
 package ItemGlobals
 
 import HashMap
+import ObjectIdGenerator
 
 constant ITEM_UID_GEN = new IdGenerator('0000')
 HashMap<int, ItemInfo> itemInfos = new HashMap<int, ItemInfo>()
@@ -75,7 +76,7 @@ public function item.hasItemInfo() returns bool
 
 public class ItemInfo
     // Could be useful to know the ID
-    int itm
+    item itm
     int level
     
     ItemType typ
@@ -87,7 +88,7 @@ public class ItemInfo
         this.typ = typ
         this.rarity = rarity
 
-        itemInfos.put(id, this)
+        itemInfos.put(itm.getTypeId(), this)
 
 public function ItemRarity.getColorString() returns string
     switch this

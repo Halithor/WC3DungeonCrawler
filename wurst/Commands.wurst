@@ -5,6 +5,6 @@ import ClosureEvents
 init
   EventListener.add(EVENT_PLAYER_CHAT_FILTER) () ->
     if EventData.getChatMessage().startsWith("-clear")
-      if EventData.getPlayer() == localPlayer
+      if EventData.getTriggerPlayer() == localPlayer
         ClearTextMessages()
     

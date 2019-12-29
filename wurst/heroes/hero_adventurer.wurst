@@ -5,30 +5,27 @@ import UnitObjEditing
 import hero_utils
 import Units
 import Soundsets
-// This is the basic hero that everyone starts the game with. This hero is a
-// basic dude who punches stuff. He will have a minimum set of abilities for 
-// a player to start with, but at level 5 he will be able to select a primary
-// class, which will change what he can do.
 
-public function generateAdventurer()
-  HeroDefinition def = GetCleanHeroDef(HERO_CLASS_ID_ADVENTURER)
-  def.setAttack1AttackType(AttackType.Normal)        
-  def.setName("Adventurer")
-  def.setProperNames("Adventurer")
+// The unarmed fighter for the start of the game or when heroes have no weapons equipped.
+public function defineUnarmedFighter()
+  HeroDefinition def = getCleanHeroDef(HERO_CLASS_ID_ADVENTURER)
+  def.setAttack1AttackType(AttackType.Normal)
+  def.setName("Unarmed")
+  def.setProperNames("Unarmed")
   def.setArmorType(ArmorType.Unarmored)
   def.setModelFile(Units.villagerMan)
   def.setUnitSoundSet(Soundsets.villagerMan)
-  def.setCollisionSize(16.0)
+  def.setCollisionSize(31.0)
   def.setSelectionScale(1)
   def.setPrimaryAttribute("AGI")
-  def.setStartingAgility(5)
-  def.setStartingIntelligence(5)
-  def.setStartingStrength(5)
+  def.setStartingAgility(10)
+  def.setStartingIntelligence(10)
+  def.setStartingStrength(10)
         
 
 
 @compiletime function gen()
-  generateAdventurer()
+  defineUnarmedFighter()
 
 init 
   gen()

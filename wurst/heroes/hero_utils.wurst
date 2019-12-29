@@ -5,7 +5,7 @@ import ObjectIds
 import hero_globals
 import Assets
 
-public function GetCleanHeroDef(int newId) returns HeroDefinition
+public function getCleanHeroDef(int newId) returns HeroDefinition
   HeroDefinition def = new HeroDefinition(newId, 'Hpal')
   def.setNormalAbilities("AInv") // Inventory
   def.setHeroAbilities("")
@@ -74,58 +74,8 @@ public function GetCleanHeroDef(int newId) returns HeroDefinition
   def.setStartingAgility(0)
   def.setStartingStrength(0)
   def.setStartingIntelligence(0)
-  def.setHeroAbilities(int2fourchar(HERO_ABILITY_AGILITY) + "," + int2fourchar(HERO_ABILITY_STRENGTH) + "," + int2fourchar(HERO_ABILITY_INTELLIGENCE))
-  def.setUpgradesUsed("R000")
+  def.setHeroAbilities(HERO_ABILITY_AGILITY.toRawCode() + "," + HERO_ABILITY_STRENGTH.toRawCode() + 
+      "," + HERO_ABILITY_INTELLIGENCE.toRawCode())
+  def.setUpgradesUsed("")
   return def
 
-
-public function genHeroType(int newRawId, int oldRawId, string name, int hp, int mana, real as, int dmg, int armor, int evasion, int critchance, int critdamage, int spellpower)
-  if not compiletime
-    // new UnitBaseStatBuffer(newRawId)
-    //   ..set(Stat.LIFE, hp)
-    //   ..set(Stat.MANA, mana)
-    //   ..set(Stat.DAMAGE, dmg)
-    //   ..set(Stat.ARMOR, armor)
-    //   ..set(Stat.EVASION, evasion)
-    //   ..set(Stat.CRITCHANCE, critchance)
-    //   ..set(Stat.CRITDAMAGE, critdamage)
-    //   ..set(Stat.SPELLPOWER, spellpower)
-  else
-    HeroDefinition def = new HeroDefinition(newRawId, oldRawId)
-    def.setNormalAbilities("AInv") // Inventory
-    def.setHeroAbilities("")
-    def.setProperNamesUsed(1)
-    def.setProperNames("Hero")
-    def.setDefaultActiveAbility("")
-    def.setAttack1CooldownTime(as)
-    def.setAttack1DamageBase(dmg-1)
-    def.setAttack1DamageNumberofDice(1)
-    def.setAttack1DamageSidesperDie(1)
-    def.setAttacksEnabled(1)
-    def.setTargetedAs("ground")
-    def.setDefenseBase(armor)
-    def.setDependencyEquivalents("")
-    def.setDefenseUpgradeBonus(0)
-    def.setRequirements("")
-    def.setRequirementsLevels("")
-    def.setDescription("")
-    def.setName(name)
-    def.setNameEditorSuffix("")
-    def.setHotkey("")
-    def.setTooltipBasic("")
-    def.setTooltipExtended("")
-    def.setUnitClassification("")
-    def.setFoodCost(0)
-    def.setGoldBountyAwardedBase(0)
-    def.setGoldBountyAwardedNumberofDice(0)
-    def.setManaMaximum(mana)
-    def.setManaRegeneration(0)
-    def.setHitPointsMaximumBase(hp)
-    def.setPointValue(0)
-    def.setSleeps(false)
-    def.setSightRadiusNight(700)
-    def.setSightRadiusDay(700)
-    def.setHitPointsRegenerationRate(0)
-    def.setRace(Race.Orc)
-    def.setManaInitialAmount(mana)
-    def.setManaRegeneration(1)
