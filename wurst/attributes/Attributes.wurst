@@ -33,8 +33,8 @@ public constant IterableMap<AttributeId, int> defaultHeroStats = new IterableMap
   ..put(ATR_ATK_DICE_FLAT, 1)
   ..put(ATR_ATK_DICE_SIDES_FLAT, 5)
   ..put(ATR_MOVESPEED_FLAT, 280)
-  ..put(ATR_AGILITY_FLAT, 1)
-  ..put(ATR_INTELLIGENCE_FLAT, 1)
-  ..put(ATR_STRENGTH_FLAT, 1)
+  ..put(ATR_AGILITY_FLAT, 10)
+  ..put(ATR_INTELLIGENCE_FLAT, 10)
+  ..put(ATR_STRENGTH_FLAT, 10)
   ..put(ATR_PRIMARY_ATR, 1)
   

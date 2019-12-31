@@ -1,0 +1,113 @@
+/** This is a small edit of the unit indexer to index items. Needs to be called manually for
+    creation and programmatic removal. Tries to catch the cases of item death and selling. */
+package ItemIndexer
+
+import ClosureEvents
+
+trigger itemDeathTrigger = CreateTrigger()
+trigger onIndexTrigger = CreateTrigger()
+trigger onDeindexTrigger = CreateTrigger()
+
+/* Unit stack for nested usage */
+item array tempItems
+var tempItemsCount = 0
+
+function pushItem(item u)
+  tempItems[tempItemsCount] = u
+  tempItemsCount++
+
+function popItem()
+  tempItemsCount--
+
+
+@configurable public function shouldIndex(item _i) returns boolean
+  return true
+
+/**  Returns the int index of this unit.
+  Can be configured by the user to supply a custom unit indexer which won't break
+  other stdlib components. */
+@configurable public function item.getIndex() returns int
+  return this.getUserData()
+
+/**  Returns the UnitIndex associated with this unit, creating a new one if necessary. */
+@configurable public function item.toItemIndex() returns ItemIndex
+  ItemIndex instance = this.getUserData() castTo ItemIndex
+
+  if (instance == null)
+    instance = new ItemIndex(this)
+
+  return instance
+
+/**	Returns the currently indexing unit.
+  That's the last indexed unit or 
+  the one about to be deindexed. */
+public function getIndexingItem() returns item
+  return tempItems[tempItemsCount - 1]
+
+/**  Adds a function to be called before a unit is deindexed.
+  Use the getIndexingUnit() function to refer to the deindexing unit. */
+public function onItemDeindex(code func)
+  onDeindexTrigger.addCondition(Condition(func))
+
+/**  Adds a function to be called after a unit is indexed.
+  Use the getIndexingUnit() function to refer to the indexed unit. */
+public function onItemIndex(code func)
+  onIndexTrigger.addCondition(Condition(func))
+
+/**  Deindexes a unit.
+  Returns whether the unit was originally indexed. */
+public function item.deindex() returns bool
+  if this.getUserData() == 0
+    return false
+  else
+    destroy this.toItemIndex()
+    return true
+
+public class ItemIndex
+  protected item whichItem
+  protected trigger dyingTrigger
+
+  function getItem() returns item
+    return this.whichItem
+
+  function getIndex() returns int
+    return this castTo int
+
+  construct(item whichItem)
+    this.whichItem = whichItem
+    this.whichItem.setUserData(this castTo int)
+    this.dyingTrigger = CreateTrigger()
+        ..registerDeathEvent(whichItem)
+        ..addAction(function handleItemDeath)
+    pushItem(whichItem)
+    onIndexTrigger.evaluate()
+    popItem()
+    print("Indexed " + whichItem.getName() + " at " + getIndex().toString())
+
+  ondestroy
+    pushItem(this.whichItem)
+    onDeindexTrigger.evaluate()
+    popItem()
+    this.whichItem.setUserData(0)
+    this.dyingTrigger.destr()
+
+hashtable castTable = InitHashtable()
+function widget2Item(widget whichWidget) returns item
+  castTable.saveWidgetHandle(0, 0, whichWidget)
+  return castTable.loadItemHandle(0, 0)
+
+// Function that is registered for all items that might be killed.
+function handleItemDeath()
+  let dyingWidget = GetTriggerWidget()
+  let dyingItem = widget2Item(dyingWidget)
+  if dyingItem != null
+    dyingItem.deindex()
+
+init
+  EventListener.add(EVENT_PLAYER_UNIT_PAWN_ITEM) () ->
+    GetManipulatedItem().deindex()
+  EventListener.add(EVENT_PLAYER_UNIT_USE_ITEM) () ->
+    let target = GetManipulatedItem()
+    if target.getCharges() <= 0 and target.getField(ITEM_BF_PERISHABLE)
+      target.deindex()
+    

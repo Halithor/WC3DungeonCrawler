@@ -6,7 +6,7 @@ import hero_globals
 import Assets
 
 public function getCleanHeroDef(int newId) returns HeroDefinition
-  HeroDefinition def = new HeroDefinition(newId, 'Hpal')
+  let def = new HeroDefinition(newId, 'Hpal')
   def.setNormalAbilities("AInv") // Inventory
   def.setHeroAbilities("")
   def.setProperNamesUsed(1)

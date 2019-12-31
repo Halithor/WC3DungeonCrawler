@@ -1,0 +1,16 @@
+package UnitSystem
+import HashMap
+import Attributes
+
+/** System for unit creation that inits attributes */
+public class UnitSystem
+
+  static function createUnit(player p, int unitId, vec2 pos, angle facing, 
+      IterableMap<AttributeId, int> values) returns unit
+    return CreateUnit(p, unitId, pos.x, pos.y, facing.degrees())
+      ..initAttributes(values)
+  
+  static function createUnit(player p, int unitId, vec2 pos, angle facing) returns unit
+    return CreateUnit(p, unitId, pos.x, pos.y, facing.degrees())
+      ..parseAndInitAttributes()
+

@@ -1,0 +1,18 @@
+package ItemSystem
+
+import ItemIndexer
+
+/** System to use for all item create/delet actions */
+public class ItemSystem
+  static function createItem(int itemId, vec2 pos) returns item
+    let ret = CreateItem(itemId, pos.x, pos.y)
+    // Calling this will create it
+    ret.toItemIndex()
+    return ret
+
+  static function removeItem(item whichItem)
+    whichItem.deindex()
+    RemoveItem(whichItem)
+
+
+    
