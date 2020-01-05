@@ -2,8 +2,9 @@ package ItemRandomization
 
 import ItemGlobals
 import Icons
-import LinkedList
 import HashList
+import Attributes
+import HashMap
 
 // Item rarity rates in percentage; Common is leftover
 constant chanceLegendary = 1
@@ -11,6 +12,7 @@ constant chanceUnique = 5
 constant chanceRare = 20
 constant chanceUncommon = 40
 
+// Icons for random items
 constant weaponIcons = new HashList<string>()
 constant offhandIcons = new HashList<string>()
 constant feetIcons = new HashList<string>()
@@ -18,6 +20,15 @@ constant headIcons = new HashList<string>()
 constant handsIcons = new HashList<string>()
 constant bodyIcons = new HashList<string>()
 constant accessoryIcons = new HashList<string>()
+
+// Possible attributes for equipment types with the weights of each option.
+constant weaponAttrs = new HashMap<AttributeId, int>()
+constant offhandAttrs = new HashMap<AttributeId, int>()
+constant feetAttrs = new HashMap<AttributeId, int>()
+constant headAttrs = new HashMap<AttributeId, int>()
+constant handsAttrs = new HashMap<AttributeId, int>()
+constant bodyAttrs = new HashMap<AttributeId, int>()
+constant accessoryAttrs = new HashMap<AttributeId, int>()
 
 public function getRandomRarity() returns ItemRarity
   let rnd = GetRandomInt(1, 100)
@@ -71,6 +82,10 @@ public function getRandomIconForEquipment(EquipmentType eType) returns string
       return accessoryIcons.get(GetRandomInt(0, accessoryIcons.size() - 1))
 
 init
+  weaponAttrs
+    ..put(ATR_LIFE_MAX_FLAT, 1)
+    ..put(ATR_MANA_MAX_FLAT, 1)
+
   weaponIcons
     ..add(Icons.bTNSteelMelee)
     ..add(Icons.bTNThoriumMelee)

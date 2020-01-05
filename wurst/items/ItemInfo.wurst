@@ -8,10 +8,10 @@ import AttributeList
 HashMap<int, ItemInfo> itemInfos = new HashMap<int, ItemInfo>()
 
 public function item.getItemInfo() returns ItemInfo
-  return itemInfos.get(GetItemTypeId(this))
+  return itemInfos.get(this.getIndex())
 
 public function item.hasItemInfo() returns bool
-  return itemInfos.has(GetItemTypeId(this))
+  return itemInfos.has(this.getIndex())
 
 /** this is an abstract representation of an item in the game. Can be applied to any item to make 
     it appear and function as this class describes */
@@ -53,6 +53,14 @@ public class ItemInfo
     whichItem.setField(ITEM_IF_TINTING_COLOR_GREEN, color.green)
     whichItem.setField(ITEM_IF_TINTING_COLOR_BLUE, color.blue)
 
+  // What does this item do to the picking up unit?
+  function onPickup(unit picker)
+    skip
+
+  // Do stuff on drop
+  function onDrop(unit dropper)
+    skip
+
 public class EquipmentInfo extends ItemInfo
   EquipmentType equipType
   AttributeList attributes
@@ -71,6 +79,13 @@ public class EquipmentInfo extends ItemInfo
     if flavorText.isNotBlank()
       tt += "\n" + colorFlavor + flavorText + "|r"
     return tt
+
+  override function onPickup(unit picker)
+    attributes.addToUnit(picker)
+
+  // Do stuff on drop
+  override function onDrop(unit dropper)
+    attributes.removeFromUnit(dropper)
 
 
 init

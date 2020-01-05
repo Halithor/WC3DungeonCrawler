@@ -6,7 +6,6 @@ import AttributeList
 import AttributeSystem_Globals
 import ItemRandomization
 import ItemInfo
-import Icons
 
 /** System to use for all item create/delete actions */
 public class ItemSystem

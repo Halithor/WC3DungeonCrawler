@@ -31,3 +31,9 @@ public class AttributeList
       let val = attrs.get(attr)
       desc += (val > 0 ? "+" : "-") + val.toString() + " " + ATTRIBUTE_LIST.get(attr).name + "\n"
     return desc
+
+  function addToUnit(unit whichUnit)
+    whichUnit.addAttributeList(attrs)
+
+  function removeFromUnit(unit whichUnit)
+    whichUnit.removeAttributeList(attrs)
