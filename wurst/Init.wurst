@@ -8,6 +8,7 @@ import ItemSystem
 import ItemIndexer
 import UnitSystem
 import Attributes
+import ClosureTimers
 
 init
   CreateTrigger()
@@ -23,14 +24,16 @@ init
   applyMapToGrid(map)
 
   let startingCell = getGridCell(map.start)
-  for i = 0 to MAX_PLAYER_NUM
-    let p = players[i]
-    if p.isIngame()
-      let hero = UnitSystem.createUnit(p, 'Hpal', startingCell.area.getCenter(), 
-          GetRandomDirectionDeg().asAngleDegrees(), defaultHeroStats)
-          ..setProperName(p.getName())
-      p.selectSingle(hero)
-      p.setCameraPosition(hero.getPos())
+  doAfter(5) () ->
+    
+    for i = 0 to MAX_PLAYER_NUM
+      let p = players[i]
+      if p.isIngame()
+        let hero = UnitSystem.createUnit(p, 'Hpal', startingCell.area.getCenter(), 
+            GetRandomDirectionDeg().asAngleDegrees(), defaultHeroStats)
+            ..setProperName(p.getName())
+        p.selectSingle(hero)
+        p.setCameraPosition(hero.getPos())
 
-  for int i = 0 to 10
-    ItemSystem.createItem('cnob', startingCell.area.randomPoint())
+    for int i = 0 to 10
+      ItemSystem.createRandomEquipment(1, startingCell.area.randomPoint())

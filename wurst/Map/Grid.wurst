@@ -17,9 +17,9 @@ public function getContainingGridCell(vec2 pos) returns GridCell
 
 function setGateState(destructable gate, bool isOpen)
   if isOpen
-    // ModifyGateBJ(bj_GATEOPERATION_OPEN, gate)
+    ModifyGateBJ(bj_GATEOPERATION_OPEN, gate)
     // remove the gates for now, since they don't do anything for us existing.
-    RemoveDestructable(gate)
+    // RemoveDestructable(gate)
   else
     ModifyGateBJ(bj_GATEOPERATION_CLOSE, gate)
 

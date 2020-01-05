@@ -1,0 +1,80 @@
+package ItemInfo
+
+import ItemGlobals
+import HashMap
+import ItemIndexer
+import AttributeList
+
+HashMap<int, ItemInfo> itemInfos = new HashMap<int, ItemInfo>()
+
+public function item.getItemInfo() returns ItemInfo
+  return itemInfos.get(GetItemTypeId(this))
+
+public function item.hasItemInfo() returns bool
+  return itemInfos.has(GetItemTypeId(this))
+
+/** this is an abstract representation of an item in the game. Can be applied to any item to make 
+    it appear and function as this class describes */
+public class ItemInfo
+  int level
+
+  string name
+  string flavorText = ""
+  string icon
+  
+  ItemType typ
+  ItemRarity rarity
+
+  construct(string name, string icon, int level, ItemType typ, ItemRarity rarity)
+    this.name = name
+    this.icon = icon
+    this.level = level
+    this.typ = typ
+    this.rarity = rarity
+  
+  // Render a string that will be set as the tooltip and description.
+  function renderTooltip() returns string
+    var tt = ""
+    tt += rarity.getColorString() + rarity.toString() + "|r" + colorHightlight + " Level " 
+          + I2S(level) + "|r "
+    return tt
+
+  // Make the item represent this item and store this Item info in the lookup map.
+  function applyToItem(item whichItem)
+    itemInfos.put(whichItem.getIndex(), this)
+    whichItem.setName(rarity.getColorString() + name)
+    whichItem.setDescription(renderTooltip())
+    whichItem.setTooltip("Purchase " + rarity.getColorString() + name)
+    whichItem.setExtendedTooltip(renderTooltip())
+    whichItem.setIconPath(icon)
+    let color = rarity.getTintingColor()
+    // This doesn't work right now?
+    whichItem.setField(ITEM_IF_TINTING_COLOR_RED, color.red)
+    whichItem.setField(ITEM_IF_TINTING_COLOR_GREEN, color.green)
+    whichItem.setField(ITEM_IF_TINTING_COLOR_BLUE, color.blue)
+
+public class EquipmentInfo extends ItemInfo
+  EquipmentType equipType
+  AttributeList attributes
+  
+  construct(string name, string icon, int level, ItemRarity rarity, EquipmentType equipType, 
+      AttributeList attrs)
+    super(name, icon, level, ItemType.Equipment, rarity)
+    this.equipType = equipType
+    this.attributes = attrs
+  
+  override function renderTooltip() returns string
+    var tt = ""
+    tt += rarity.getColorString() + rarity.toString() + "|r" + colorHightlight + " Level " 
+          + I2S(level) + "|r " + equipType.toString() + "\n"
+    tt += attributes.getDescription()
+    if flavorText.isNotBlank()
+      tt += "\n" + colorFlavor + flavorText + "|r"
+    return tt
+
+
+init
+  // Register item info delete on de-index of the items.
+  onItemDeindex() ->
+    if itemInfos.has(getIndexingItem().getIndex())
+      itemInfos.remove(getIndexingItem().getIndex())

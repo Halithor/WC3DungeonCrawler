@@ -1,0 +1,33 @@
+package AttributeList
+
+import AttributeSystem_Globals
+import HashMap
+import AttributeSystem
+
+public class AttributeList
+  private IterableMap<AttributeId, int> attrs = new IterableMap<AttributeId, int>()
+
+  construct()
+    skip
+  
+  construct(IterableMap<AttributeId, int> attrs)
+    this.attrs.addAll(attrs)
+
+  ondestroy
+    destroy attrs
+
+  function addAttr(AttributeId whichAttr, int value)
+    attrs.put(whichAttr, value)
+
+  function getAttr(AttributeId whichAttr) returns int
+    return attrs.has(whichAttr) ? attrs.get(whichAttr) : 0
+
+  function getAttrs() returns IterableMap<AttributeId, int>
+    return attrs
+  
+  function getDescription() returns string
+    var desc = ""
+    for attr in attrs
+      let val = attrs.get(attr)
+      desc += (val > 0 ? "+" : "-") + val.toString() + " " + ATTRIBUTE_LIST.get(attr).name + "\n"
+    return desc

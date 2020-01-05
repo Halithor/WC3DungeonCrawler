@@ -1,15 +1,39 @@
 package ItemGlobals
 
-import HashMap
-import ObjectIdGenerator
+import ItemObjEditing
+import Icons
+import ChannelAbilityPreset
+import AttributeSystem_Globals
 
 constant ITEM_UID_GEN = new IdGenerator('0000')
-HashMap<int, ItemInfo> itemInfos = new HashMap<int, ItemInfo>()
 
-public constant string ColorAttributeColor = "|cff3B97D3"
-public constant string ColorSubDetail = "|cffaaaaaa"
-public constant string ColorHightlight = "|cffffcc00"
-public constant string ColorFlavor = "|cff8888aa"
+public constant kIID_BasicNoEffect = compiletime(ITEM_ID_GEN.next())
+public constant kIID_BasicSelfTarget = compiletime(ITEM_ID_GEN.next())
+
+public constant string colorAttributeColor = "|cff3B97D3"
+public constant string colorSubDetail = "|cffaaaaaa"
+public constant string colorHightlight = "|cffffcc00"
+public constant string colorFlavor = "|cff8888aa"
+
+public constant validEquipmentAttributes = [
+  // ATR_LIFE_MAX_FLAT,
+  // ATR_LIFE_MAX_PERC,
+  // ATR_LIFE_REGEN_FLAT,
+  // ATR_LIFE_REGEN_PERC,
+  // ATR_MANA_MAX_FLAT,
+  // ATR_MANA_MAX_PERC,
+  // ATR_MANA_REGEN_FLAT,
+  ATR_ARMOR_FLAT,
+  // ATR_ARMOR_PERC,
+  // ATR_ATK_CD_PERC,
+  ATR_ATK_DMG_FLAT,
+  // ATR_ATK_DMG_PERC,
+  // ATR_MOVESPEED_FLAT,
+  // ATR_MOVESPEED_PERC,
+  ATR_AGILITY_FLAT,
+  ATR_STRENGTH_FLAT,
+  ATR_INTELLIGENCE_FLAT
+]
 
 public enum ItemRarity
   Common
@@ -20,7 +44,7 @@ public enum ItemRarity
 
 public enum ItemType
   Equipment
-  Consumable
+  Active
 
 public enum EquipmentType
   Weapon
@@ -64,31 +88,13 @@ public enum WeaponHandRequirement
   OneHand
   TwoHand
 
-public enum ConsumableType
-  Potion
-  Scroll
-
-public function item.getItemInfo() returns ItemInfo
-  return itemInfos.get(GetItemTypeId(this))
-
-public function item.hasItemInfo() returns bool
-  return itemInfos.has(GetItemTypeId(this))
-
-public class ItemInfo
-  // Could be useful to know the ID
-  item itm
-  int level
-  
-  ItemType typ
-  ItemRarity rarity
-
-  construct(item itm, int level, ItemType typ, ItemRarity rarity)
-    this.level = level
-    this.itm = itm
-    this.typ = typ
-    this.rarity = rarity
-    itm.getHandleId()
-    itemInfos.put(itm.getTypeId(), this)
+public enum ActiveType
+  // The active targets yourself.
+  SelfTarget
+  UnitTarget
+  AllyTarget
+  EnemyTarget
+  AoETarget
 
 public function ItemRarity.getColorString() returns string
   switch this
@@ -108,7 +114,7 @@ public function ItemRarity.getColorString() returns string
 public function ItemRarity.getTintingColor() returns color
   switch this
     case Common
-      return color(255, 255, 255)
+      return color(155, 0, 155)
     case Uncommon
       return color(0, 102, 204)
     case Rare
@@ -282,3 +288,34 @@ public function WeaponType.getHandsRequirement() returns WeaponHandRequirement
     return WeaponHandRequirement.TwoHand
   return WeaponHandRequirement.OneHand    
 
+@compiletime
+function defineBasicItems()
+  new ItemDefinition(kIID_BasicNoEffect, 'clsd')
+    ..setAbilities("")
+    ..setInterfaceIcon(Icons.bTNCheese)
+    ..setIgnoreCooldown(true)
+    ..setGoldCost(0)
+    ..setIncludeAsRandomChoice(false)
+    ..setName("Basic No Effect Item")
+    ..setDescription("Basic No Effect Item")
+    ..setHotkey("")
+    ..setTooltipBasic("Do not purchase")
+    ..setTooltipExtended("Basic item with no effect.")
+  let selfTargetAID = ABIL_ID_GEN.next()
+  new ChannelAbilityPreset(selfTargetAID, 1, true)
+    ..makeUnitSpell(0, 0)
+    ..presetCooldown((int lvl) -> 0)
+    ..presetTargetTypes(Targettype.NONE)
+  new ItemDefinition(kIID_BasicSelfTarget, 'clsd')
+    ..setAbilities(selfTargetAID.toRawCode())
+    ..setActivelyUsed(true)
+    ..setInterfaceIcon(Icons.bTNPotionGreenSmall)
+    ..setIgnoreCooldown(true)
+    ..setGoldCost(0)
+    ..setIncludeAsRandomChoice(false)
+    ..setName("Basic Self Target Item")
+    ..setDescription("Basic Self Target Item")
+    ..setHotkey("")
+    ..setTooltipBasic("Do not purchase")
+    ..setTooltipExtended("Basic item with self target spell.")
+    

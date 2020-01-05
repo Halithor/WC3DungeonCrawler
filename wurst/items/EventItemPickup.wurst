@@ -1,0 +1,3 @@
+package EventItemPickup
+
+import ClosureEvents

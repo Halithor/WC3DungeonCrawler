@@ -1,0 +1,192 @@
+package ItemRandomization
+
+import ItemGlobals
+import Icons
+import LinkedList
+import HashList
+
+// Item rarity rates in percentage; Common is leftover
+constant chanceLegendary = 1
+constant chanceUnique = 5
+constant chanceRare = 20
+constant chanceUncommon = 40
+
+constant weaponIcons = new HashList<string>()
+constant offhandIcons = new HashList<string>()
+constant feetIcons = new HashList<string>()
+constant headIcons = new HashList<string>()
+constant handsIcons = new HashList<string>()
+constant bodyIcons = new HashList<string>()
+constant accessoryIcons = new HashList<string>()
+
+public function getRandomRarity() returns ItemRarity
+  let rnd = GetRandomInt(1, 100)
+  var ret = ItemRarity.Common
+  if rnd <= chanceLegendary
+    ret =  ItemRarity.Legendary
+  else if rnd <= chanceLegendary + chanceUnique
+    ret =  ItemRarity.Unique
+  else if rnd <= chanceLegendary + chanceUnique + chanceRare
+    ret =  ItemRarity.Rare
+  else if rnd <=chanceLegendary + chanceUnique + chanceRare + chanceUncommon
+    ret =  ItemRarity.Uncommon
+  return ret
+
+public function getRandomEquipmentType() returns EquipmentType
+  let rnd = GetRandomInt(0, 6)
+  var ret = EquipmentType.Accessory
+  switch rnd
+    case 0
+      ret = EquipmentType.Weapon
+    case 1
+      ret = EquipmentType.Offhand
+    case 2
+      ret = EquipmentType.Feet
+    case 3
+      ret = EquipmentType.Head
+    case 4 
+      ret = EquipmentType.Hands
+    case 5
+      ret = EquipmentType.Body
+    case 6
+      ret = EquipmentType.Accessory
+  return ret
+
+
+public function getRandomIconForEquipment(EquipmentType eType) returns string
+  switch eType
+    case Weapon
+      return weaponIcons.get(GetRandomInt(0, weaponIcons.size() - 1))
+    case Offhand
+      return offhandIcons.get(GetRandomInt(0, offhandIcons.size() - 1))
+    case Feet
+      return feetIcons.get(GetRandomInt(0, feetIcons.size() - 1))
+    case Head
+      return headIcons.get(GetRandomInt(0, headIcons.size() - 1))
+    case Hands
+      return handsIcons.get(GetRandomInt(0, handsIcons.size() - 1))
+    case Body
+      return bodyIcons.get(GetRandomInt(0, bodyIcons.size() - 1))
+    case Accessory
+      return accessoryIcons.get(GetRandomInt(0, accessoryIcons.size() - 1))
+
+init
+  weaponIcons
+    ..add(Icons.bTNSteelMelee)
+    ..add(Icons.bTNThoriumMelee)
+    ..add(Icons.bTNArcaniteMelee)
+    ..add(Icons.bTNHumanMissileUpOne)
+    ..add(Icons.bTNOrcMeleeUpOne)
+    ..add(Icons.bTNOrcMeleeUpTwo)
+    ..add(Icons.bTNOrcMeleeUpThree)
+    ..add(Icons.bTNWitchDoctorAdept)
+    ..add(Icons.bTNWitchDoctorMaster)
+    ..add(Icons.bTNSteelRanged)
+    ..add(Icons.bTNThoriumRanged)
+    ..add(Icons.bTNArcaniteRanged)
+    ..add(Icons.bTNImprovedBows)
+    ..add(Icons.bTNUpgradeMoonGlaive)
+
+  offhandIcons
+    ..add(Icons.bTNUnholyArmor)
+    ..add(Icons.bTNImprovedUnholyArmor)
+    ..add(Icons.bTNAdvancedUnholyArmor)
+    ..add(Icons.bTNHumanArmorUpOne)
+    ..add(Icons.bTNHumanArmorUpTwo)
+    ..add(Icons.bTNHumanArmorUpThree)
+    ..add(Icons.bTNSorceressAdept)
+    ..add(Icons.bTNSorceressMaster)
+    ..add(Icons.bTNNecromancerAdept)
+    ..add(Icons.bTNNecromancerMaster)
+  
+  feetIcons
+    ..add(Icons.bTNSlippersOfAgility)
+    ..add(Icons.bTNBootsOfSpeed)
+    ..add(Icons.bTNBoots)
+
+  headIcons
+    ..add(Icons.bTNMaskOfDeath)
+    ..add(Icons.bTNHelmOfValor)
+    ..add(Icons.bTNHelmutPurple)
+    ..add(Icons.bTNCirclet)
+    ..add(Icons.bTNHoodOfCunning)
+    ..add(Icons.bTNArmorGolem)
+
+  handsIcons
+    ..add(Icons.bTNGlove)
+    ..add(Icons.bTNSpellSteal)
+    ..add(Icons.bTNAdvancedUnholyStrength)
+    ..add(Icons.bTNUnholyStrength)
+    ..add(Icons.bTNImprovedUnholyStrength)
+    ..add(Icons.bTNAmuletOftheWild)
+    ..add(Icons.bTNGauntletsOfOgrePower)
+
+
+  bodyIcons
+    ..add(Icons.bTNMantleOfIntelligence)
+    ..add(Icons.bTNMoonArmor)
+    ..add(Icons.bTNImprovedMoonArmor)
+    ..add(Icons.bTNAdvancedMoonArmor)
+    ..add(Icons.bTNCloak)
+    ..add(Icons.bTNCloakOfFlames)
+    ..add(Icons.bTNReinforcedHides)
+    ..add(Icons.bTNLeatherUpgradeOne)
+    ..add(Icons.bTNLeatherUpgradeTwo)
+    ..add(Icons.bTNLeatherUpgradeThree)
+
+
+  accessoryIcons
+    ..add(Icons.bTNAmulet)
+    ..add(Icons.bTNAnimalWarTraining)
+    ..add(Icons.bTNAnkh)
+    ..add(Icons.bTNClayFigurine)
+    ..add(Icons.bTNCrystalBall)
+    ..add(Icons.dISBTNDust)
+    ..add(Icons.bTNEnchantedGemstone)
+    ..add(Icons.bTNGem)
+    ..add(Icons.bTNGlyph)
+    ..add(Icons.bTNGoldRing)
+    ..add(Icons.bTNHeartOfAszune)
+    ..add(Icons.bTNHeartOfSearinox)
+    ..add(Icons.bTNHornOfCenarius)
+    ..add(Icons.bTNHornOfDoom)
+    ..add(Icons.bTNHornOfFog)
+    ..add(Icons.bTNJanggo)
+    ..add(Icons.bTNMedalionOfCourage)
+    ..add(Icons.bTNNatureTouchGrow)
+    ..add(Icons.bTNNecklace)
+    ..add(Icons.bTNNightElfCaptureFlag)
+    ..add(Icons.bTNOrcCaptureFlag)
+    ..add(Icons.bTNPebble)
+    ..add(Icons.bTNPendantOfEnergy)
+    ..add(Icons.bTNPendantOfMana)
+    ..add(Icons.bTNPeriapt)
+    ..add(Icons.bTNPeriapt1)
+    ..add(Icons.bTNPillage)
+    ..add(Icons.bTNPipeOfInsight)
+    ..add(Icons.bTNRingGreen)
+    ..add(Icons.bTNRingJadeFalcon)
+    ..add(Icons.bTNRingLionHead)
+    ..add(Icons.bTNRingPurple)
+    ..add(Icons.bTNRingSkull)
+    ..add(Icons.bTNRingVioletSpider)
+    ..add(Icons.bTNSentryWard)
+    ..add(Icons.bTNShadowPact)
+    ..add(Icons.bTNSoulGem)
+    ..add(Icons.bTNTalisman)
+    ..add(Icons.bTNTelescope)
+    ..add(Icons.bTNUrnOfKelThuzad)
+    ..add(Icons.bTNUsedSoulGem)
+    ..add(Icons.bTNWispSplode)
+    ..add(Icons.bTNLiquidFire)
+    ..add(Icons.bTNMoonStone)
+    ..add(Icons.bTNPhilosophersStone)
+    ..add(Icons.bTNPhoenixEgg)
+    ..add(Icons.bTNRunedBracers)
+    ..add(Icons.bTNRune)
+    ..add(Icons.bTNSpellShieldAmulet)
+    ..add(Icons.bTNStaffOfSanctuary)
+    ..add(Icons.bTNStaffOfTeleportation)
+    ..add(Icons.bTNTransmute)
+    ..add(Icons.bTNEngineeringUpgrade)
+    ..add(Icons.bTNAcidBomb)
