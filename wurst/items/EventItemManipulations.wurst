@@ -2,13 +2,15 @@ package EventItemManipulations
 
 import ClosureEvents
 import ItemInfo
+import ItemIndexer
 
 init
   EventListener.add(EVENT_PLAYER_UNIT_PICKUP_ITEM) () ->
     let whichItem = EventData.getManipulatedItem()
     let whichUnit = EventData.getManipulatingUnit()
     let itemInfo = whichItem.getItemInfo()
-    printLog(Loglevel.DEBUG, whichUnit.getName() + " picked up " + whichItem.getName())
+    printLog(Loglevel.DEBUG, whichUnit.getName() + " picked up " + whichItem.getName() + " [" + 
+        whichItem.getIndex().toString() + "]")
     itemInfo.onPickup(whichUnit)
   EventListener.add(EVENT_PLAYER_UNIT_DROP_ITEM) () ->
     let whichItem = EventData.getManipulatedItem()

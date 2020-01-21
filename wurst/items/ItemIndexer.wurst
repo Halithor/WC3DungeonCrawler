@@ -82,7 +82,6 @@ public class ItemIndex
     pushItem(whichItem)
     onIndexTrigger.evaluate()
     popItem()
-    print("Indexed " + whichItem.getName() + " at " + getIndex().toString())
 
   ondestroy
     pushItem(this.whichItem)
