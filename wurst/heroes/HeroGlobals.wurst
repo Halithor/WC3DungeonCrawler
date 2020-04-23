@@ -1,0 +1,29 @@
+package HeroGlobals
+
+import ObjectIdGenerator
+
+public let CLASS_SELECTION = compiletime(UNIT_ID_GEN.next())
+
+public enum HeroAttribute
+  Agi
+  Int
+  Str
+
+public function HeroAttribute.toCode() returns string
+  switch this
+    case Agi
+      return "AGI"
+    case Int
+      return "INT"
+    case Str 
+      return "STR"
+
+/** Used for integration with the Attributes System **/
+public function HeroAttribute.toNumeric() returns int
+  switch this
+    case Agi
+      return 0
+    case Int
+      return 1
+    case Str 
+      return 2

@@ -1,0 +1,152 @@
+package HeroRegister
+import HeroRace
+import HeroClass
+import HashList
+import Icons
+import Units
+import ObjectIdGenerator
+import UnitObjEditing
+import CombatTypes
+import Soundsets
+import HashMap
+import Attributes
+import HeroAttrs
+import HeroGlobals
+
+tuple combat(DamageType damageType, real cooldown, int baseDamage, int diceCount, int diceSides, 
+    int range, DefenseType defenseType)
+tuple visuals(string icon, string model, real scale, string voice)
+
+HashList<HeroEntry> heroEntries = new HashList<HeroEntry>()
+
+class HeroEntry
+  int unitId
+
+  HeroRace rac
+  HeroClass clas
+  HeroAttribute primary
+
+  combat combat
+  visuals visuals
+
+  construct(int unitId, HeroRace rac, HeroClass clas, HeroAttribute primary, combat combat, visuals visuals)
+    this.unitId = unitId
+    this.rac = rac
+    this.clas = clas
+    this.primary = primary
+    this.combat = combat
+    this.visuals = visuals
+
+  function getName() returns string
+    return this.rac.name + " " + this.clas.name
+  
+  function getAttrs() returns HeroAttributes
+    return rac.getAttributes().add(clas.getAttributes())
+  
+  function getDescription() returns string
+    let attrs = getAttrs()
+    return "" +
+        "Attack Type: " + combat.damageType.toString() + 
+        "Attack Range: " + (combat.range > 128 ? combat.range.toString() : "Melee") +
+        "Defense Type: " + combat.defenseType.toString() +
+        "Armor: " + attrs.armor.toString() + "\n" +
+        "Health: " + attrs.health.toString() + "\n" +
+        "Mana: " + attrs.mana.toString() + "\n" +
+        (primary == HeroAttribute.Str ? "|cffffcc00" : "") + "Strength|r: " + 
+        attrs.strength.toString() + " + " + attrs.agilityGain.toString() + "\n" +
+        (primary == HeroAttribute.Agi ? "|cffffcc00" : "") + "Agility|r: " + 
+        attrs.agility.toString() + " + " + attrs.agilityGain.toString() + "\n" +
+        (primary == HeroAttribute.Int ? "|cffffcc00" : "") + "Intelligence|r: " + 
+        attrs.intelligence.toString() + " + " + attrs.agilityGain.toString() + "\n"
+
+  // Define the HeroDefiniton for this hero
+  function createHeroDefintion()
+    // guard against calls not in compiletime
+    if compiletime
+      let def = new HeroDefinition(unitId, 'Hpal')
+        ..setSelectionScale(1)
+        ..setIconGameInterface(visuals.icon)
+        ..setModelFile(visuals.model)
+        ..setScalingValue(visuals.scale)
+        ..setAttack1AttackType(combat.damageType.toCode())
+        ..setArmorType(combat.defenseType.toCode())
+        ..setDefenseBase(0)
+        ..setUnitSoundSet(visuals.voice)
+        ..setPrimaryAttribute(primary.toCode())
+        ..setName(getName())
+        ..setTooltipBasic("Select " + getName())
+        ..setDescription(getDescription())
+      getAttrs().applyToHeroDef(def)
+
+  // Create the starting attributes set for this hero based on the member variables of this class.
+  function getStartingHeroStats() returns IterableMap<AttributeId, int>
+    // TODO(marquart)
+    return new IterableMap<AttributeId, int>()
+    ..put(ATR_LIFE_MAX_FLAT, 100)
+    ..put(ATR_LIFE_REGEN_FLAT, 50)
+    ..put(ATR_MANA_MAX_FLAT, 50)
+    ..put(ATR_MANA_REGEN_FLAT, 50)
+    ..put(ATR_ARMOR_FLAT, 0)
+    ..put(ATR_ATK_CD_FLAT, 250) // 2.5 seconds
+    ..put(ATR_ATK_DMG_FLAT, 2)
+    ..put(ATR_ATK_DICE_FLAT, 1)
+    ..put(ATR_ATK_DICE_SIDES_FLAT, 5)
+    ..put(ATR_MOVESPEED_FLAT, 280)
+    ..put(ATR_AGILITY_FLAT, 10)
+    ..put(ATR_INTELLIGENCE_FLAT, 10)
+    ..put(ATR_STRENGTH_FLAT, 10)
+    ..put(ATR_PRIMARY_ATR, 1)
+
+function registerHero(HeroEntry entry)
+  heroEntries.add(entry)
+  entry.createHeroDefintion()
+      
+@compiletime
+function registerHeros()
+  defineHeroes()
+  defineSelectionBuildings()
+
+function defineHeroes()
+  // Warrior
+  registerHero(new HeroEntry(compiletime(HERO_ID_GEN.next()), raceOrc, classWarrior, 
+      HeroAttribute.Str,
+      combat(DamageType.Physical, 2.5, 0, 2, 8, 90, DefenseType.Flesh),
+      visuals( Icons.bTNGrunt, Units.grunt1, 1.0, Soundsets.grunt)))
+  // Ranger
+  registerHero(new HeroEntry(compiletime(HERO_ID_GEN.next()), raceNaga, classRanger,
+      HeroAttribute.Agi,
+      combat(DamageType.Natural, 3.0, -5, 5, 5, 550, DefenseType.Elemental),
+      visuals(Icons.bTNSnapDragon, Units.snapDragon1, 1.0, Soundsets.snapDragon)))
+  // Wizard
+  registerHero(new HeroEntry(compiletime(HERO_ID_GEN.next()), raceHighElf, classWizard, 
+      HeroAttribute.Int,
+      combat(DamageType.Arcane, 3.0, 5, 3, 8, 450, DefenseType.Mystical),
+      visuals(Icons.bTNSorceress, Units.sorceress1, 1.0, Soundsets.sorceress)))
+  // Cleric
+  registerHero(new HeroEntry(compiletime(HERO_ID_GEN.next()), raceHuman, classCleric, 
+      HeroAttribute.Int,
+      combat(DamageType.Natural, 3.0, 0, 3, 7, 300, DefenseType.Flesh),
+      visuals("ReplaceableTextures\\CommandButtons\\BTNApprenticeWizard.blp", Units.humanMage1, 1.0, 
+      Soundsets.priest)))
+  // Fighter
+  registerHero(new HeroEntry(compiletime(HERO_ID_GEN.next()), raceHuman, classFighter, 
+      HeroAttribute.Str,
+      combat(DamageType.Physical, 2.5, 0, 2, 8, 90, DefenseType.Flesh),
+      visuals( Icons.bTNFootman, Units.footman1, 1.0, Soundsets.footman)))
+  // Rogue
+  registerHero(new HeroEntry(compiletime(HERO_ID_GEN.next()), raceBeast, classRogue, 
+      HeroAttribute.Agi, 
+      combat(DamageType.Physical, 3.0, 0, 4, 6, 90, DefenseType.Flesh),
+      visuals(Icons.bTNSpider, Units.spiderBlack1, 1.2, Soundsets.spider)))
+  // Monk
+  registerHero(new HeroEntry(compiletime(HERO_ID_GEN.next()), raceBeast, classMonk, 
+      HeroAttribute.Str,
+      combat(DamageType.Frost, 3.0, 0, 5, 4, 90, DefenseType.Natural), 
+      visuals(Icons.bTNPolarFurbolgTracker, Units.polarFurbolgTracker1, 0.8, Soundsets.furbolg)))
+
+function defineSelectionBuildings()
+  skip
+
+// Call define heroes at init to populate the structure
+init 
+  defineHeroes()

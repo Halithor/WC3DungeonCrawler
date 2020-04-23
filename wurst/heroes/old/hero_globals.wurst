@@ -26,7 +26,7 @@ public function getHeroPrimaryAttribute(unit u) returns Attribute
   return Attribute.Str
 
 @compiletime function createLearnables()
-  var str = new AbilityDefinitionDemonHunterEvasion(HERO_ABILITY_STRENGTH)
+  let str = new AbilityDefinitionDemonHunterEvasion(HERO_ABILITY_STRENGTH)
   str.setTooltipLearn("Increase Strength [|cffffcc00Q|r]")
   str.setTooltipLearnExtended("Select this to increase strength by 1 point.")
   str.setIconResearch(Icons.bTNGauntletsOfOgrePower)
@@ -34,7 +34,7 @@ public function getHeroPrimaryAttribute(unit u) returns Attribute
   str.setButtonPositionResearchX(0)
   str.setButtonPositionResearchY(0)
 
-  var agi = new AbilityDefinitionBladeMasterCriticalStrike(HERO_ABILITY_AGILITY)
+  let agi = new AbilityDefinitionBladeMasterCriticalStrike(HERO_ABILITY_AGILITY)
   agi.setTooltipLearn("Increase Agility [|cffffcc00W|r]")
   agi.setTooltipLearnExtended("Select this to increase agility by 1 point.")
   agi.setIconResearch(Icons.bTNSlippersOfAgility)
@@ -43,7 +43,7 @@ public function getHeroPrimaryAttribute(unit u) returns Attribute
   agi.setButtonPositionResearchY(0)
   
 
-  var inte = new AbilityDefinitionMountainKingBash(HERO_ABILITY_INTELLIGENCE)
+  let inte = new AbilityDefinitionMountainKingBash(HERO_ABILITY_INTELLIGENCE)
   inte.setTooltipLearn("Increase Intelligence [|cffffcc00E|r]")
   inte.setTooltipLearnExtended("Select this to increase intelligence by 1 point.")
   inte.setIconResearch(Icons.bTNMantleOfIntelligence)
@@ -55,9 +55,9 @@ init
   registerPlayerUnitEvent(EVENT_PLAYER_HERO_LEVEL) ->
     GetTriggerUnit().addSkillPoints(4)
   registerPlayerUnitEvent(EVENT_PLAYER_HERO_SKILL) ->
-    var learned = GetLearnedSkill()
+    let learned = GetLearnedSkill()
     // Unlearn skill with tome
-    var i = CreateItem('tret', 0, 0)
+    let i = CreateItem('tret', 0, 0)
     UnitAddItem(GetTriggerUnit(), i)
     i.remove()
     let hero = GetTriggerUnit()

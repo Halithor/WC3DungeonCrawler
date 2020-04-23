@@ -1,0 +1,83 @@
+package CombatTypes
+import UnitObjEditing
+
+public enum DamageType
+  Physical
+  Cursed
+  Fire
+  Frost
+  Natural
+  Arcane
+
+public enum DefenseType
+  Flesh
+  Unclean
+  Elemental
+  Natural
+  Construct
+  Demonic
+  Mystical
+
+public function DamageType.toCode() returns AttackType
+  switch this
+    case Physical
+      return AttackType.Normal
+    case Cursed
+      return AttackType.Pierce
+    case Fire
+      return AttackType.Siege
+    case Frost
+      return AttackType.Hero
+    case Natural
+      return AttackType.Chaos
+    case Arcane
+      return AttackType.Magic
+
+public function DefenseType.toCode() returns ArmorType
+  switch this
+    case Flesh
+      return ArmorType.Small
+    case Unclean
+      return ArmorType.Medium
+    case Elemental
+      return ArmorType.Large
+    case Natural
+      return ArmorType.Fortified
+    case Construct
+      return ArmorType.Hero
+    case Demonic
+      return ArmorType.Divine
+    case Mystical
+      return ArmorType.Unarmored
+
+public function DamageType.toString() returns string
+  switch this
+    case Physical
+      return "Physical"
+    case Cursed
+      return "Cursed"
+    case Fire
+      return "Fire"
+    case Frost
+      return "Frost"
+    case Natural
+      return "Natural"
+    case Arcane
+      return "Arcane"
+
+public function DefenseType.toString() returns string
+  switch this
+    case Flesh
+      return "Flesh"
+    case Unclean
+      return "Unclean"
+    case Elemental
+      return "Elemental"
+    case Natural
+      return "Natural"
+    case Construct
+      return "Construct"
+    case Demonic
+      return "Demonic"
+    case Mystical
+      return "Mystical"

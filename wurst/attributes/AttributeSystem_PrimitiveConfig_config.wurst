@@ -1,4 +1,6 @@
 package AttributeSystem_PrimitiveConfig_config
+import Attributes
+import HashList
 
 @config constant lifeMaxPerStr = 12.0
 @config constant lifeRegenPerStr = 0.2
@@ -7,3 +9,20 @@ package AttributeSystem_PrimitiveConfig_config
 @config constant armorPerAgi = (1.0 / 7.0)
 @config constant atkSpdPerAgi = 0.01
 @config constant movespeedPerAgi = 1.0
+
+// Attributes take into account gain and level in this sytem.
+@config public AttributeCalculator calculateAgility = u -> ((u.getAttribute(ATR_AGILITY_FLAT) * 
+    (100 + u.getAttribute(ATR_AGILITY_PERC))) div 100) + 
+    ((u.getAttribute(ATR_AGILITY_GAIN) * u.getAttribute(ATR_HERO_LEVEL)) div 10)
+@config public HashList<AttributeId> parentsAgility = asList(ATR_AGILITY_FLAT, ATR_AGILITY_PERC, 
+    ATR_AGILITY_GAIN, ATR_HERO_LEVEL)
+@config public AttributeCalculator calculateStrength = u -> ((u.getAttribute(ATR_STRENGTH_FLAT) * 
+    (100 + u.getAttribute(ATR_STRENGTH_PERC))) div 100) + 
+    ((u.getAttribute(ATR_AGILITY_GAIN) * u.getAttribute(ATR_HERO_LEVEL)) div 10)
+@config public HashList<AttributeId> parentsStrength = asList(ATR_STRENGTH_FLAT, ATR_STRENGTH_PERC, 
+    ATR_STRENGTH_GAIN, ATR_HERO_LEVEL)
+@config public AttributeCalculator calculateIntelligence = u -> ((
+    u.getAttribute(ATR_INTELLIGENCE_FLAT) * (100 + u.getAttribute(ATR_INTELLIGENCE_PERC))) div 100) 
+    + ((u.getAttribute(ATR_AGILITY_GAIN) * u.getAttribute(ATR_HERO_LEVEL)) div 10)
+@config public HashList<AttributeId> parentsIntelligence = asList(ATR_INTELLIGENCE_FLAT, 
+    ATR_INTELLIGENCE_PERC, ATR_INTELLIGENCE_GAIN, ATR_HERO_LEVEL)

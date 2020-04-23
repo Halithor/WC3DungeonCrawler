@@ -1,0 +1,54 @@
+package HeroAttrs
+import UnitObjEditing
+import AttributeList
+
+public class HeroAttributes
+  int agility
+  real agilityGain
+  int intelligence
+  real intelligenceGain
+  int strength
+  real strengthGain
+  // Other stats
+  int armor
+  int mana
+  int health
+
+  construct(int agility, real agilityGain, int intelligence, real intelligenceGain, int strength, 
+        real strengthGain, int armor, int mana, int health)
+    this.agility = agility
+    this.agilityGain = agilityGain
+    this.intelligence = intelligence
+    this.intelligenceGain = intelligenceGain
+    this.strength = strength
+    this.strengthGain = strengthGain
+    this.armor = armor
+    this.mana = mana
+    this.health = health
+
+  function add(HeroAttributes other) returns HeroAttributes
+    return new HeroAttributes(agility + other.agility, 
+        agilityGain + other.agilityGain, 
+        intelligence + other.intelligence,
+        intelligenceGain + other.intelligenceGain,
+        strength + other.strength,
+        strengthGain + other.strengthGain,
+        armor + other.armor,
+        mana + other.mana,
+        health + other.health)
+
+  function applyToHeroDef(HeroDefinition def)
+    def.setStartingAgility(agility)
+    def.setStartingIntelligence(intelligence)
+    def.setStartingStrength(strength)
+    def.setAgilityPerLevel(agilityGain)
+    def.setIntelligencePerLevel(intelligenceGain)
+    def.setStrengthPerLevel(strengthGain)
+    def.setDefenseBase(armor)
+    def.setHitPointsMaximumBase(health)
+    def.setManaMaximum(mana)
+
+  function addToAttributeList(AttributeList list)
+    
+        
+    

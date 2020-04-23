@@ -8,7 +8,7 @@ import Soundsets
 
 // The unarmed fighter for the start of the game or when heroes have no weapons equipped.
 public function defineUnarmedFighter()
-  HeroDefinition def = getCleanHeroDef(HERO_CLASS_ID_ADVENTURER)
+  let def = getCleanHeroDef(HERO_CLASS_ID_ADVENTURER)
   def.setAttack1AttackType(AttackType.Normal)
   def.setName("Unarmed")
   def.setProperNames("Unarmed")
