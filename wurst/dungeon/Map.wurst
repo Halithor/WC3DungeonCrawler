@@ -1,0 +1,116 @@
+package Map
+import MapConstants
+
+public class RoomPair
+  MapRoom fst 
+  MapRoom scd
+  
+  construct(MapRoom fst, MapRoom scd)
+    this.fst = fst
+    this.scd = scd
+    
+  // returns direction from fst to second
+  function getDir() returns Dir
+    let xdiff = fst.point.x - scd.point.x
+    let ydiff = fst.point.y - scd.point.y
+    if xdiff.abs() > ydiff.abs()
+      // more east west than north south
+      if xdiff > 0
+        return Dir.West
+      else 
+        return Dir.East
+    else
+      if ydiff > 0
+        return Dir.South
+      else 
+        return Dir.North
+
+
+public class Door 
+  MapRoom source 
+  Dir dir
+
+  construct(MapRoom source, Dir dir)
+    this.source = source
+    this.dir = dir
+    
+public enum Status
+  Unexplored
+  Start
+  Finish
+
+public function Status.toString() returns string
+  string ret
+  switch this
+    case Unexplored
+      ret = "Unexplored"
+    case Start
+      ret = "Start"
+    case Finish
+      ret = "Finish"
+  return ret
+
+enum CreepType
+  None
+  Standard
+  Trap
+  Miniboss
+
+// A room in the map. Contains info for gen and doors and the like.
+public class MapRoom
+  Status status
+  // The distance to the start of the map
+  int distance = 0
+  coord point
+
+  // The
+  bool isStart = false
+  bool isFinish = false
+
+  bool shop = false
+  bool treasure = false
+  // Is there a revive shrine in this room?
+  bool shrine = false
+
+  // Doors
+  bool isNorthOpen = false
+  bool isSouthOpen = false
+  bool isEastOpen = false
+  bool isWestOpen = false
+  
+  construct(coord point)
+    this.point = point
+    this.status = Status.Unexplored
+
+  function toString() returns string
+    return this.point.toString() + "@" + distance.toString() + "\n" +
+        (isStart ? "START\n" : "") + (isFinish ? "FINISH\n" : "") + 
+        status.toString() + "\n"
+
+/** This class is the logical representation of an entire dungeon map. It contains a grid of rooms 
+  * that contain the details and generation status of each room 
+  */
+public class Map 
+  // The width and height of this map
+  coord size
+  
+  // Special locations within the map itself
+  coord start
+  coord finish
+
+  MapRoom array[MAP_ROWS * MAP_COLS] rooms
+
+  construct(coord size)
+    this.size = size
+    for y = 0 to size.y - 1
+      for x = 0 to size.x - 1
+        rooms[(size.x * y) + x] = new MapRoom(coord(x, y))
+  
+  function getRandomPoint() returns coord
+    return coord(GetRandomInt(0, size.x - 1), GetRandomInt(0, size.y - 1))
+
+  function getRoom(coord point) returns MapRoom
+    return rooms[(size.x * point.y) + point.x]
+
+  function isPointInMap(coord point) returns bool
+    return 0 <= point.x and point.x < size.x and 0 <= point.y and point.y < size.y

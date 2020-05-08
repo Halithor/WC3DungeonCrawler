@@ -1,0 +1,43 @@
+package Dungeon
+import Map
+import Grid
+import MapConstants
+import MapGen
+
+// Track the most recent dungeon for the enter trigger.
+Dungeon lastDungeon
+
+/** 
+  * Class that represents the current dungeon. Has controls for generating and cleaning the 
+  * dungeon 
+  */
+public class Dungeon 
+  Map map
+  Grid grid
+
+  construct()
+    lastDungeon = this
+    map = new Map(coord(5,5))
+    let generator = new MapGenerator(map)..generateMap()
+    destroy generator
+    grid = new Grid()
+    grid.applyMapToGrid(map)
+
+  ondestroy
+    destroy map
+    destroy grid
+
+  // Move the unit into the dungeon.
+  function enterUnit(unit u)
+    let startingCell = grid.getGridCell(map.start)
+    u.setPos(startingCell.center)
+    if u.isType(UNIT_TYPE_HERO)
+      print(u.getProperName() + " the " + u.getName() + " enters the dungeon.", 10)
+
+init
+  // Register a global enter trigger since there's no closure support.
+  CreateTrigger()
+  ..registerEnterRegion(CreateRegion()..addRect(gg_rct_DungeonEntrance), null)
+  ..addAction() ->
+    if lastDungeon != null
+      lastDungeon.enterUnit(EventData.getEnteringUnit())

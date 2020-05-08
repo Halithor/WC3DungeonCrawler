@@ -1,26 +1,10 @@
+/** This is the package the contains the logic of generating a Map */
 package MapGen
 
 import MapConstants
 import HashSet
+import Map
 
-enum Dir
-  North
-  South
-  West
-  East
-
-function Dir.toOffset() returns coord
-  coord val
-  switch this
-    case North
-      val = coord(0, 1)
-    case South
-      val = coord(0, -1)
-    case West
-      val = coord(-1, 0)
-    case East 
-      val = coord(1, 0)
-  return val
 
 function Dir.openDoor(MapRoom room)
   switch this
@@ -32,129 +16,6 @@ function Dir.openDoor(MapRoom room)
       room.isWestOpen = true
     case East
       room.isEastOpen = true
-
-function Dir.opposite() returns Dir
-  switch this
-    case North
-      return Dir.South
-    case South
-      return Dir.North
-    case West
-      return Dir.East
-    case East
-      return Dir.West
-
-class RoomPair
-  MapRoom fst 
-  MapRoom scd
-  
-  construct(MapRoom fst, MapRoom scd)
-    this.fst = fst
-    this.scd = scd
-    
-  // returns direction from fst to second
-  function getDir() returns Dir
-    let xdiff = fst.point.x - scd.point.x
-    let ydiff = fst.point.y - scd.point.y
-    if xdiff.abs() > ydiff.abs()
-      // more east west than north south
-      if xdiff > 0
-        return Dir.West
-      else 
-        return Dir.East
-    else
-      if ydiff > 0
-        return Dir.South
-      else 
-        return Dir.North
-
-
-class Door 
-  MapRoom source 
-  Dir dir
-
-  construct(MapRoom source, Dir dir)
-    this.source = source
-    this.dir = dir
-    
-enum Status
-  Unexplored
-  Start
-  Finish
-
-function Status.toString() returns string
-  string ret
-  switch this
-    case Unexplored
-      ret = "Unexplored"
-    case Start
-      ret = "Start"
-    case Finish
-      ret = "Finish"
-  return ret
-
-enum CreepType
-  None
-  Standard
-  Trap
-  Miniboss
-
-// A room in the map. Contains info for gen and doors and the like.
-public class MapRoom
-  Status status
-  // The distance to the start of the map
-  int distance = 0
-  coord point
-
-  // The
-  bool isStart = false
-  bool isFinish = false
-
-  bool shop = false
-  bool treasure = false
-  // Is there a revive shrine in this room?
-  bool shrine = false
-
-  // Doors
-  bool isNorthOpen = false
-  bool isSouthOpen = false
-  bool isEastOpen = false
-  bool isWestOpen = false
-  
-  construct(coord point)
-    this.point = point
-    this.status = Status.Unexplored
-
-  function toString() returns string
-    return this.point.toString() + "@" + distance.toString() + "\n" +
-        (isStart ? "START\n" : "") + (isFinish ? "FINISH\n" : "") + 
-        status.toString() + "\n"
-
-/** This class is used for generation. Represents a whole map of a given size. */
-public class Map 
-  // The width and height of this map
-  coord size
-  
-  // Special locations within the map itself
-  coord start
-  coord finish
-
-  MapRoom array[MAP_ROWS * MAP_COLS] rooms
-
-  construct(coord size)
-    this.size = size
-    for y = 0 to size.y - 1
-      for x = 0 to size.x - 1
-        rooms[(size.x * y) + x] = new MapRoom(coord(x, y))
-  
-  function getRandomPoint() returns coord
-    return coord(GetRandomInt(0, size.x - 1), GetRandomInt(0, size.y - 1))
-
-  function getRoom(coord point) returns MapRoom
-    return rooms[(size.x * point.y) + point.x]
-
-  function isPointInMap(coord point) returns bool
-    return 0 <= point.x and point.x < size.x and 0 <= point.y and point.y < size.y
 
 function addValidDoor(Map map, MapRoom room, HashSet<Door> doors, Dir dir)
   let point = room.point + dir.toOffset()
@@ -216,9 +77,8 @@ function testRoomPair(int bestDist, HashSet<RoomPair> pairs, RoomPair testPair) 
     pairs.add(testPair)
   return retDist
 
-public function generateMap(coord size) returns Map
+function internalGenMap(Map map)
   Log.debug("Generating map")
-  let map = new Map(size)
   // pick a start
   map.start = map.getRandomPoint()
   map.getRoom(map.start).isStart = true
@@ -237,11 +97,11 @@ public function generateMap(coord size) returns Map
   var finishDoors = buildDoorSet(map, finishRooms)
   // alternativng sets, do the following until no more rooms are unexplored.
   Status last = Status.Unexplored
-  while startRooms.size() + finishRooms.size() < size.x * size.y
+  while startRooms.size() + finishRooms.size() < map.size.x * map.size.y
     last = last == Status.Start ? Status.Finish : Status.Start
     Log.debug("Opening: " + (last == Status.Start ? "Start" : "Finish") + " | " + 
       startRooms.size().toString() + "+" + finishRooms.size().toString() + "<" + 
-      (size.x * size.y).toString())
+      (map.size.x * map.size.y).toString())
     if last == Status.Start
       openADoor(map, startRooms, startDoors, last)
     else
@@ -254,9 +114,9 @@ public function generateMap(coord size) returns Map
   // compile pairs of adjacent rooms, one from each set, to find the greatest distance.
   Log.debug("Connecting halves")
   var bestDist = -1
-  var pairs = new HashSet<RoomPair>()
-  for y = 0 to size.y - 1
-    for x = 0 to size.x - 1
+  let pairs = new HashSet<RoomPair>()
+  for y = 0 to map.size.y - 1
+    for x = 0 to map.size.x - 1
       if y > 0 
         // down
         let testPair = new RoomPair(map.getRoom(coord(x, y)), map.getRoom(coord(x, y - 1)))
@@ -272,5 +132,13 @@ public function generateMap(coord size) returns Map
   connection.getDir().opposite().openDoor(connection.scd)
   
   // OPTIONAL: reposition the finish to be farthest away from it's current location, in it's set, not on the start path.
-  return map
   
+public class MapGenerator
+  Map map
+
+  construct(Map map)
+    this.map = map
+
+  function generateMap()
+    // Todo refactor map generation into a OO style
+    internalGenMap(map)

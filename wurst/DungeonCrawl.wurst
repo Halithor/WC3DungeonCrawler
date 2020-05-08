@@ -1,18 +1,25 @@
 package DungeonCrawl
+
 import HeroSelection
+import Dungeon
+import ClosureEvents
 
 /** The main class for the game */
 public class DungeonCrawl
   HeroSelection heroSelection
+  Dungeon currentDungeon
 
-  construct()
+  function start()
     heroSelection = new HeroSelection() ->
-      print("heroes selected")
-      
+      print("Hero Selection has finished.", 10)
+      print("Generating the Dungeon...", 10)
+      currentDungeon = new Dungeon()
+      EventListener.add(EVENT_PLAYER_UNIT_SPELL_EFFECT) -> 
+        
 
   ondestroy
     skip
 
 
 init
-  new DungeonCrawl()
+  new DungeonCrawl()..start()

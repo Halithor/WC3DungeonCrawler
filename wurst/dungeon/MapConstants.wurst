@@ -1,0 +1,50 @@
+package MapConstants
+
+public constant MAP_CENTER = vec2(0, 0)
+public constant ROOM_SIZE = 1024.0
+public constant ROOM_HALF = 512.0
+
+public constant MAP_ROWS = 10
+public constant MAP_COLS = 10
+
+public constant kDID_WALL_HORZ = 'B000'
+public constant kDID_WALL_VERT = 'B001'
+
+public enum Dir
+  North
+  South
+  West
+  East
+
+// Tuple for a integer coordinate
+public tuple coord(int x, int y)
+
+public function coord.op_plus(coord v) returns coord
+  return coord(this.x + v.x, this.y + v.y)
+
+public function coord.toString() returns string
+  return "(" + this.x.toString() + ", " + this.y.toString() + ")"
+
+public function Dir.toOffset() returns coord
+  coord val
+  switch this
+    case North
+      val = coord(0, 1)
+    case South
+      val = coord(0, -1)
+    case West
+      val = coord(-1, 0)
+    case East 
+      val = coord(1, 0)
+  return val
+
+public function Dir.opposite() returns Dir
+  switch this
+    case North
+      return Dir.South
+    case South
+      return Dir.North
+    case West
+      return Dir.East
+    case East
+      return Dir.West

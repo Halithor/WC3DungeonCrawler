@@ -29,7 +29,7 @@ public function defineHeroes()
   registerHero(new HeroEntry(compiletime(HERO_ID_GEN.next()), raceNaga, classRanger,
       HeroAttribute.Agi,
       combat(DamageType.Natural, 3.0, -5, 5, 5, 550, DefenseType.Elemental),
-      visuals(Icons.bTNSnapDragon, Units.snapDragon1, 1.0, Soundsets.snapDragon)))
+      visuals(Icons.bTNSnapDragon, Units.snapDragon1, 0.8, Soundsets.snapDragon)))
   // Wizard
   registerHero(new HeroEntry(compiletime(HERO_ID_GEN.next()), raceHighElf, classWizard, 
       HeroAttribute.Int,
@@ -50,7 +50,7 @@ public function defineHeroes()
   registerHero(new HeroEntry(compiletime(HERO_ID_GEN.next()), raceBeast, classRogue, 
       HeroAttribute.Agi, 
       combat(DamageType.Physical, 3.0, 0, 4, 6, 90, DefenseType.Flesh),
-      visuals(Icons.bTNSpider, Units.spiderBlack1, 1.2, Soundsets.spider)))
+      visuals(Icons.bTNSpider, Units.spiderBlack1, 0.9, Soundsets.spider)))
   // Monk
   registerHero(new HeroEntry(compiletime(HERO_ID_GEN.next()), raceBeast, classMonk, 
       HeroAttribute.Str,

@@ -13,6 +13,7 @@ rect gg_rct_Hero_Spawn= null
 rect gg_rct_Selection= null
 trigger gg_trg_Untitled_Trigger_001= null
 trigger gg_trg_Untitled_Trigger_002= null
+trigger gg_trg_Untitled_Trigger_003= null
 
 
 //JASSHelper struct globals:
@@ -97,7 +98,7 @@ function CreateRegions takes nothing returns nothing
     set gg_rct_DungeonEntrance=Rect(6016.0, - 4096.0, 6272.0, - 3584.0)
     set gg_rct_Village_Area=Rect(5888.0, - 5632.0, 9472.0, - 2048.0)
     set gg_rct_Hero_Spawn=Rect(7360.0, - 4672.0, 7680.0, - 4320.0)
-    set gg_rct_Selection=Rect(6176.0, - 5344.0, 6304.0, - 5216.0)
+    set gg_rct_Selection=Rect(5984.0, - 5536.0, 6432.0, - 5056.0)
 endfunction
 
 //***************************************************************************
@@ -121,6 +122,20 @@ endfunction
 
 
 //===========================================================================
+// Trigger: Untitled Trigger 003
+//===========================================================================
+function Trig_Untitled_Trigger_003_Actions takes nothing returns nothing
+endfunction
+
+//===========================================================================
+function InitTrig_Untitled_Trigger_003 takes nothing returns nothing
+    set gg_trg_Untitled_Trigger_003=CreateTrigger()
+    call TriggerRegisterEnterRectSimple(gg_trg_Untitled_Trigger_003, gg_rct_DungeonEntrance)
+    call TriggerAddAction(gg_trg_Untitled_Trigger_003, function Trig_Untitled_Trigger_003_Actions)
+endfunction
+
+
+//===========================================================================
 // Trigger: Untitled Trigger 002
 //===========================================================================
 function Trig_Untitled_Trigger_002_Actions takes nothing returns nothing
@@ -135,6 +150,7 @@ endfunction
 //===========================================================================
 function InitCustomTriggers takes nothing returns nothing
     call InitTrig_Untitled_Trigger_001()
+    call InitTrig_Untitled_Trigger_003()
     call InitTrig_Untitled_Trigger_002()
 endfunction
 
