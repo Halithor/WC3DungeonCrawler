@@ -1,0 +1,14 @@
+package Globals
+
+public interface Callback
+  function execute()
+
+// 6 players in game.
+public let MAX_PLAYER_NUMBER = 5
+
+public function getPlayersIngame() returns int
+  int count = 0
+  for pid = 0 to MAX_PLAYER_NUMBER
+    if players[pid].isIngame() 
+      count++
+  return count

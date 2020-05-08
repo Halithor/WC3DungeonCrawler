@@ -2,7 +2,7 @@ package HeroGlobals
 
 import ObjectIdGenerator
 
-public let CLASS_SELECTION = compiletime(UNIT_ID_GEN.next())
+public let kUID_CLASS_SELECTION = compiletime(UNIT_ID_GEN.next())
 
 public enum HeroAttribute
   Agi

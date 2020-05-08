@@ -1,8 +1,6 @@
-package hero_utils
+package HeroUtils
 
 import UnitObjEditing
-import ObjectIds
-import hero_globals
 import Assets
 
 public function getCleanHeroDef(int newId) returns HeroDefinition
@@ -74,8 +72,8 @@ public function getCleanHeroDef(int newId) returns HeroDefinition
   def.setStartingAgility(0)
   def.setStartingStrength(0)
   def.setStartingIntelligence(0)
-  def.setHeroAbilities(HERO_ABILITY_AGILITY.toRawCode() + "," + HERO_ABILITY_STRENGTH.toRawCode() + 
-      "," + HERO_ABILITY_INTELLIGENCE.toRawCode())
   def.setUpgradesUsed("")
+  def.setProperNames("")
+  def.setProperNamesUsed(1)
   return def
 

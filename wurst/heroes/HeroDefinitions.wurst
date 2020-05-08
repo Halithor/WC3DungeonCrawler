@@ -1,0 +1,58 @@
+package HeroDefinitions
+import HeroRegister
+import HeroGlobals
+import CombatTypes
+import ObjectIdGenerator
+import HeroRace
+import HeroClass
+import Icons
+import Units
+import Soundsets
+
+
+
+public function defineHeroes()
+  // Warrior
+  registerHero(new HeroEntry(compiletime(HERO_ID_GEN.next()), raceOrc, classWarrior, 
+      HeroAttribute.Str,
+      combat(DamageType.Physical, 2.5, 0, 2, 8, 90, DefenseType.Flesh),
+      visuals(Icons.bTNGrunt, Units.grunt1, 1.0, Soundsets.grunt)))
+  registerHero(new HeroEntry(compiletime(HERO_ID_GEN.next()), raceHuman, classWarrior, 
+      HeroAttribute.Str,
+      combat(DamageType.Physical, 2.5, 0, 2, 8, 90, DefenseType.Flesh),
+      visuals(Icons.bTNBandit, Units.bandit1, 1.0, Soundsets.bandit)))
+  registerHero(new HeroEntry(compiletime(HERO_ID_GEN.next()), raceHighElf, classWarrior, 
+      HeroAttribute.Str,
+      combat(DamageType.Frost, 2.9, 0, 2, 8, 90, DefenseType.Mystical),
+      visuals(Icons.bTNTheCaptain, Units.theCaptain1, 1.0, Soundsets.theCaptain)))
+  // Ranger
+  registerHero(new HeroEntry(compiletime(HERO_ID_GEN.next()), raceNaga, classRanger,
+      HeroAttribute.Agi,
+      combat(DamageType.Natural, 3.0, -5, 5, 5, 550, DefenseType.Elemental),
+      visuals(Icons.bTNSnapDragon, Units.snapDragon1, 1.0, Soundsets.snapDragon)))
+  // Wizard
+  registerHero(new HeroEntry(compiletime(HERO_ID_GEN.next()), raceHighElf, classWizard, 
+      HeroAttribute.Int,
+      combat(DamageType.Arcane, 3.0, 5, 3, 8, 450, DefenseType.Mystical),
+      visuals(Icons.bTNSorceress, Units.sorceress1, 1.0, Soundsets.sorceress)))
+  // Cleric
+  registerHero(new HeroEntry(compiletime(HERO_ID_GEN.next()), raceHuman, classCleric, 
+      HeroAttribute.Int,
+      combat(DamageType.Natural, 3.0, 0, 3, 7, 300, DefenseType.Flesh),
+      visuals("ReplaceableTextures\\CommandButtons\\BTNApprenticeWizard.blp", Units.humanMage1, 1.0, 
+      Soundsets.priest)))
+  // Fighter
+  registerHero(new HeroEntry(compiletime(HERO_ID_GEN.next()), raceHuman, classFighter, 
+      HeroAttribute.Str,
+      combat(DamageType.Physical, 2.5, 0, 2, 8, 90, DefenseType.Flesh),
+      visuals( Icons.bTNFootman, Units.footman1, 1.0, Soundsets.footman)))
+  // Rogue
+  registerHero(new HeroEntry(compiletime(HERO_ID_GEN.next()), raceBeast, classRogue, 
+      HeroAttribute.Agi, 
+      combat(DamageType.Physical, 3.0, 0, 4, 6, 90, DefenseType.Flesh),
+      visuals(Icons.bTNSpider, Units.spiderBlack1, 1.2, Soundsets.spider)))
+  // Monk
+  registerHero(new HeroEntry(compiletime(HERO_ID_GEN.next()), raceBeast, classMonk, 
+      HeroAttribute.Str,
+      combat(DamageType.Frost, 3.0, 0, 5, 4, 90, DefenseType.Natural), 
+      visuals(Icons.bTNPolarFurbolgTracker, Units.polarFurbolgTracker1, 0.8, Soundsets.furbolg)))

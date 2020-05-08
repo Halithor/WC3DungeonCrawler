@@ -4,6 +4,7 @@ import Attributes
 
 @config function registerAttributes()
   print("Registering attrs")
+  registerAttribute(ATR_HERO_LEVEL, "Hero Level")
   registerAttribute(ATR_EXP_GAIN, "Experience Gain")
   registerAttribute(ATR_HEAL_CASTER_BONUS, "% Healer Bonus")
   registerAttribute(ATR_HEAL_TARGET_BONUS, "% Healed Bonus")

@@ -1,5 +1,0 @@
-package GameConstants
-
-
-public constant player PLAYER_RITHEN_KINGDOM = Player(9) // Lightblue
-public constant int MAX_PLAYER_NUM = 7

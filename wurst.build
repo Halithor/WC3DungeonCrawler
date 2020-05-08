@@ -4,6 +4,6 @@ dependencies:
 - https://github.com/wurstscript/wurstStdlib2
 - https://github.com/Halithor/WC3AttributeSystem
 buildMapData:
-  name: Dungeon Crawl v0.03
-  fileName: DungeonCrawl_v0.03
+  name: Dungeon Crawl v0.04
+  fileName: DungeonCrawl_v0.04
   author: Halithor

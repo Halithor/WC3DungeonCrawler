@@ -7,4 +7,12 @@ init
     if EventData.getChatMessage().startsWith("-clear")
       if EventData.getTriggerPlayer() == localPlayer
         ClearTextMessages()
+      else if EventData.getChatMessage().startsWith("-dev")
+        if EventData.getTriggerPlayer().getName() == "Halithor" 
+            or EventData.getTriggerPlayer().getName().toLowerCase() == "local player"
+          let cmd = EventData.getChatMessage().ltrim("-dev").ltrim()
+          if cmd.startsWith("vision")
+            printTimedToPlayer("|cffffcc00Vision granted!", 10, EventData.getTriggerPlayer())
+            createVision(EventData.getTriggerPlayer(), bj_mapInitialPlayableArea, false)
+        
     

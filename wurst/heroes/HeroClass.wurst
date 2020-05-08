@@ -1,5 +1,8 @@
 package HeroClass
 import HeroAttrs
+import ObjectIdGenerator
+import HashSet
+import Icons
 
 public let classWarrior = new WarriorClass()
 public let classRanger = new RangerClass()
@@ -8,60 +11,85 @@ public let classCleric = new ClericClass()
 public let classFighter = new FighterClass()
 public let classRogue = new RogueClass()
 public let classMonk = new MonkClass()
+public let classes = new HashSet<HeroClass>()..add(
+  classWarrior,
+  classRanger,
+  classWizard,
+  classCleric,
+  classFighter,
+  classRogue,
+  classMonk
+)
 
 public abstract class HeroClass
   string name
+  string icon
 
-  construct(string name)
+  int uidSelectionBuilding
+  int uidSelectableUnit
+
+  // The two uids need to be in compiletime() statements, since they're essentially text replacement
+  // macros.
+  construct(string name, string icon, int uidSelectionBuilding, int uidSelectableUnit)
     this.name = name
+    this.icon = icon
+    this.uidSelectionBuilding = uidSelectionBuilding
+    this.uidSelectableUnit = uidSelectableUnit
 
   abstract function getAttributes() returns HeroAttributes
 
 class WarriorClass extends HeroClass
   construct()
-    super("Warrior")
+    super("Warrior", Icons.bTNGrunt, compiletime(UNIT_ID_GEN.next()), 
+        compiletime(UNIT_ID_GEN.next()))
 
   override function getAttributes() returns HeroAttributes
     return new HeroAttributes(5, 0.5, 5, 0.5, 10, 1.0, 10, 20, 80)
 
 class RangerClass extends HeroClass
   construct()
-    super("Ranger")
+    super("Ranger",  Icons.bTNArcher, compiletime(UNIT_ID_GEN.next()), 
+        compiletime(UNIT_ID_GEN.next()))
 
   override function getAttributes() returns HeroAttributes
     return new HeroAttributes(10, 1.0, 5, 0.5, 5, 0.5, 20, 20, 40)
 
 class WizardClass extends HeroClass
   construct()
-    super("Wizard")
+    super("Wizard", Icons.bTNSorceress, compiletime(UNIT_ID_GEN.next()), 
+        compiletime(UNIT_ID_GEN.next()))
 
   override function getAttributes() returns HeroAttributes
     return new HeroAttributes(5, 0.5, 10, 1.0, 5, 0.5, 10, 40, 40)
 
 class ClericClass extends HeroClass
   construct()
-    super("Cleric")
+    super("Cleric", Icons.bTNPriest, compiletime(UNIT_ID_GEN.next()), 
+        compiletime(UNIT_ID_GEN.next()))
 
   override function getAttributes() returns HeroAttributes
     return new HeroAttributes(4, 0.4, 8, 0.8, 8, 0.8, 8, 32, 64)
 
 class FighterClass extends HeroClass
   construct()
-    super("Fighter")
+    super("Fighter", Icons.bTNFootman, compiletime(UNIT_ID_GEN.next()), 
+        compiletime(UNIT_ID_GEN.next()))
 
   override function getAttributes() returns HeroAttributes
     return new HeroAttributes(8, 0.8, 4, 0.4, 8, 0.8, 16, 16, 64)
 
 class RogueClass extends HeroClass
   construct()
-    super("Rogue")
+    super("Rogue", Icons.bTNAssassin, compiletime(UNIT_ID_GEN.next()), 
+        compiletime(UNIT_ID_GEN.next()))
 
   override function getAttributes() returns HeroAttributes
     return new HeroAttributes(8, 0.8, 8, 0.8, 4, 0.4, 16, 32, 32)
 
 class MonkClass extends HeroClass
   construct()
-    super("Monk")
+    super("Monk", Icons.bTNPandarenBrewmaster, compiletime(UNIT_ID_GEN.next()), 
+        compiletime(UNIT_ID_GEN.next()))
 
   override function getAttributes() returns HeroAttributes
     return new HeroAttributes(7, 0.7, 7, 0.7, 7, 0.7, 14, 28, 56)

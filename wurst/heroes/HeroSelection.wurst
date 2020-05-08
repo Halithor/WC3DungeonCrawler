@@ -1,0 +1,147 @@
+package HeroSelection
+
+import HeroRegister
+import HeroGlobals
+import HeroClass
+import Globals
+import ObjectIdGenerator
+import UnitObjEditing
+import ObjectIds
+import AbilityIds
+import ClosureEvents
+import HashMap
+import AttributeSystem
+import ClosureForGroups
+
+let uidSelectionUnit = compiletime(UNIT_ID_GEN.next())
+let selectPos = gg_rct_Selection.getCenter()
+
+/** 
+  * Class that spawns all units required for hero selection and cleans the spawned units up on 
+  * destruction. 
+  */
+public class HeroSelection
+  unit selectClassBuilding
+  IterableMap<HeroClass, unit> classSelectionBuildings
+  group playerSelectors
+
+  EventListener onSell
+  EventListener onDeselect
+
+  unit array[6] desiredSelected
+  bool array[6] selectionFinished
+
+  Callback onFinish
+
+  construct(Callback onFinish)
+    this.onFinish = onFinish
+
+    classSelectionBuildings = new IterableMap<HeroClass, unit>()
+    playerSelectors = CreateGroup()
+
+    spawnSelectionBuildings()
+    spawnPlayerSelectors()
+    setupEvents()
+
+    for pid = 0 to MAX_PLAYER_NUMBER
+      let p = players[pid]
+      setDesiredSelection(p, selectClassBuilding)
+      selectDesiredUnit(p)
+      selectionFinished[pid] = false
+
+
+  ondestroy
+    // cleanup selectors
+    for u in playerSelectors
+      u.remove()
+    playerSelectors.destr()
+    // cleanup buildings
+    selectClassBuilding.remove()
+    for clas in classSelectionBuildings
+      classSelectionBuildings.get(clas).remove()
+    destroy classSelectionBuildings
+    // remove event listeners
+    destroy onSell
+    destroy onDeselect
+
+  // Create all the selection buildings
+  function spawnSelectionBuildings()
+    selectClassBuilding = createUnit(players[PLAYER_NEUTRAL_PASSIVE], kUID_CLASS_SELECTION, 
+        selectPos, (270.0).fromDeg())
+
+    for clas in classes
+      let classBuilding = createUnit(players[PLAYER_NEUTRAL_PASSIVE], clas.uidSelectionBuilding, 
+          selectPos, (270.0).fromDeg())
+      classSelectionBuildings.put(clas, classBuilding)
+
+  // spawn the units to select the 
+  function spawnPlayerSelectors()
+    for int i = 0 to MAX_PLAYER_NUMBER
+      let u = createUnit(players[i], uidSelectionUnit, gg_rct_Selection.getCenter(), (0.0).fromDeg())
+      playerSelectors.addUnit(u)
+  
+  // Creates triggers that respond to players purchasing and deselecting
+  function setupEvents()
+    onSell = EventListener.add(EVENT_PLAYER_UNIT_SELL) ->
+      let sold = EventData.getSoldUnit()
+      let p = EventData.getBuyingUnit().getOwner()
+      for clas in classes
+        // if its a class selection, 
+        if clas.uidSelectableUnit == sold.getTypeId()
+          setDesiredSelection(p, classSelectionBuildings.get(clas))
+          selectDesiredUnit(p)
+          sold.remove()
+      // is it a hero selection?
+      for heroEntry in heroEntries
+        if sold.getTypeId() == heroEntry.unitId
+          selectionFinished[p.getId()] = true
+          let place = gg_rct_Hero_Spawn.getCenter()
+          sold.setPos(place)
+          p.selectSingle(sold)
+          p.setCameraPosition(place)
+          sold.initAttributes(heroEntry.getStartingHeroStats())
+          sold.setProperName(p.getName())
+          forUnitsInRect(gg_rct_Selection) (unit u) ->
+            if u.getOwner() == p
+              u.remove()
+          print(p.getName() + " has selected " + heroEntry.getName() + ".", 10)
+          if isSelectionComplete()
+            Log.info("Hero Selection Complete")
+            onFinish.execute()
+            // TODO destroy this somehow. 
+          
+    onDeselect = EventListener.add(EVENT_PLAYER_UNIT_DESELECTED) ->
+      if not selectionFinished[EventData.getTriggerPlayer().getId()]
+        selectDesiredUnit(EventData.getTriggerPlayer())
+  
+  // Updates which unit a player should be trying to select.
+  function setDesiredSelection(player p, unit u)
+    desiredSelected[p.getId()] = u
+
+  // Selects the current desired target for a player
+  function selectDesiredUnit(player p)
+    let desired = desiredSelected[p.getId()]
+    p.selectSingle(desired)
+    p.setCameraPosition(desired.getPos())
+
+  // Checks that all players curently in game have picked a hero.
+  function isSelectionComplete() returns bool
+    for pid = 0 to MAX_PLAYER_NUMBER
+      if players[pid].isIngame() and not selectionFinished[pid]
+        return false
+    return true
+    
+
+@compiletime
+function defineSelectionUnit()
+  new UnitDefinition(uidSelectionUnit, 'hfoo')
+    ..setCollisionSize(0.0)
+    ..setRace(Race.Commoner)
+    ..setModelFile("dummy.mdl")
+    ..setSightRadiusDay(300)
+    ..setSightRadiusNight(300)
+    ..setAttacksEnabled(0)
+    ..setSpeedBase(0)
+    ..setAcquisitionRange(0)
+    ..setSelectionScale(-1.0)
+    ..setNormalAbilities(commaList(AbilityIds.invulnerable))

@@ -1,0 +1,18 @@
+package DungeonCrawl
+import HeroSelection
+
+/** The main class for the game */
+public class DungeonCrawl
+  HeroSelection heroSelection
+
+  construct()
+    heroSelection = new HeroSelection() ->
+      print("heroes selected")
+      
+
+  ondestroy
+    skip
+
+
+init
+  new DungeonCrawl()

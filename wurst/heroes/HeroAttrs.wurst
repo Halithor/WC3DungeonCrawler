@@ -1,6 +1,7 @@
 package HeroAttrs
 import UnitObjEditing
 import AttributeList
+import Attributes
 
 public class HeroAttributes
   int agility
@@ -49,6 +50,14 @@ public class HeroAttributes
     def.setManaMaximum(mana)
 
   function addToAttributeList(AttributeList list)
-    
+    list.addAttr(ATR_STRENGTH_FLAT, strength)
+    list.addAttr(ATR_STRENGTH_GAIN, (strengthGain * 10).round())
+    list.addAttr(ATR_AGILITY_FLAT, agility)
+    list.addAttr(ATR_AGILITY_GAIN, (agilityGain * 10).round())
+    list.addAttr(ATR_INTELLIGENCE_FLAT, intelligence)
+    list.addAttr(ATR_INTELLIGENCE_GAIN, (intelligenceGain * 10).round())
+    list.addAttr(ATR_LIFE_MAX_FLAT, health)
+    list.addAttr(ATR_MANA_MAX, mana)
+    list.addAttr(ATR_ARMOR_FLAT, armor)
         
     
