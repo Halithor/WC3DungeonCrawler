@@ -1,0 +1,4 @@
+package DungeonGlobals
+import ObjectIdGenerator
+
+public let kUID_DungeonExitGate = compiletime(UNIT_ID_GEN.next())

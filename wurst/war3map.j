@@ -11,9 +11,10 @@ rect gg_rct_DungeonEntrance= null
 rect gg_rct_Village_Area= null
 rect gg_rct_Hero_Spawn= null
 rect gg_rct_Selection= null
+rect gg_rct_WaitingArea= null
 trigger gg_trg_Untitled_Trigger_001= null
-trigger gg_trg_Untitled_Trigger_002= null
 trigger gg_trg_Untitled_Trigger_003= null
+trigger gg_trg_Untitled_Trigger_002= null
 
 
 //JASSHelper struct globals:
@@ -96,9 +97,12 @@ function CreateRegions takes nothing returns nothing
     set gg_rct_Reward5=Rect(7936.0, 2816.0, 8704.0, 3584.0)
     set gg_rct_Reward6=Rect(8704.0, 2816.0, 9472.0, 3584.0)
     set gg_rct_DungeonEntrance=Rect(6016.0, - 4096.0, 6272.0, - 3584.0)
+    set we=AddWeatherEffect(gg_rct_DungeonEntrance, 'FDrl')
+    call EnableWeatherEffect(we, true)
     set gg_rct_Village_Area=Rect(5888.0, - 5632.0, 9472.0, - 2048.0)
     set gg_rct_Hero_Spawn=Rect(7360.0, - 4672.0, 7680.0, - 4320.0)
-    set gg_rct_Selection=Rect(5984.0, - 5536.0, 6432.0, - 5056.0)
+    set gg_rct_Selection=Rect(6016.0, - 2592.0, 6464.0, - 2112.0)
+    set gg_rct_WaitingArea=Rect(8992.0, - 2528.0, 9376.0, - 2112.0)
 endfunction
 
 //***************************************************************************

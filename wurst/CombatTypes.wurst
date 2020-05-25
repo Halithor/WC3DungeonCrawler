@@ -81,3 +81,37 @@ public function DefenseType.toString() returns string
       return "Demonic"
     case Mystical
       return "Mystical"
+
+public function DefenseType.toArmorSound() returns ArmorSoundType
+  switch this
+    case Flesh
+      return ArmorSoundType.Flesh
+    case Unclean
+      return ArmorSoundType.Flesh
+    case Elemental
+      return ArmorSoundType.Stone
+    case Natural
+      return ArmorSoundType.Wood
+    case Construct
+      return ArmorSoundType.Metal
+    case Demonic
+      return ArmorSoundType.Stone
+    case Mystical
+      return ArmorSoundType.Ethereal
+
+public function DefenseType.toDeathType() returns int
+  switch this
+    case Flesh
+      return 3
+    case Unclean
+      return 3
+    case Elemental
+      return 2
+    case Natural
+      return 3
+    case Construct
+      return 2
+    case Demonic
+      return 3
+    case Mystical
+      return 2

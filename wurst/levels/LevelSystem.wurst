@@ -1,13 +1,23 @@
 package LevelSystem
+import ClosureTimers
+import Dungeon
 
 public class LevelSystem
   int currentLevel = 0
+  Dungeon currentDungeon
 
   // Initializes the level system.
   function start()
-    //
+    setupNextLevel()
+
+  function setupNextLevel()
+    currentLevel++
+    print("Generating Floor " + currentLevel.toString(), 5)
+    currentDungeon = new Dungeon()
     
   function endLevel()
+    print("Clearing the dungeon...", 5)
     // cleanup the mobs, items, etc
-    // cleanup traps
-    skip
+    // cleanup traps  
+    destroy currentDungeon
+    doAfter(1.0, () -> setupNextLevel())

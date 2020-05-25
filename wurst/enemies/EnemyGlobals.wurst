@@ -1,0 +1,52 @@
+package EnemyGlobals
+import CombatTypes
+import HashMap
+import ObjectIdGenerator
+
+enum Rarity
+  Common
+  Uncommon
+  Rare
+  Unique
+  Legendary
+
+// A decent animation starting point.
+public let ANIMATION_STND = animation(0.5, 0.5, 0.5, 0.5)
+
+public let ENEMIES = new IterableMap<int, Enemy>()
+
+// The statistics that make up an enemy. Needs to be a class for tuple storage.
+public class Enemy
+  int unitId
+  Rarity rarity
+  visual visual
+  offense offense
+  defense defense 
+
+  construct(int unitId, Rarity rarity, visual visual, offense offense, defense defense)
+    this.unitId = unitId
+    this.rarity = rarity
+    this.visual = visual
+    this.offense = offense
+    this.defense = defense
+    ENEMIES.put(unitId, this)
+
+// The visual representation of an enemy
+public tuple visual(string name, string icon, string model, string soundset, real selection, 
+    real scale, real shadow, string projectile, animation animation)
+
+// Represents the animation of this chosen model.
+public tuple animation(real atkPnt, real atkBack, real castPnt, real castBack)
+
+// Offensive statistics of an enemy. dmgBase is a multiplier on the DPS that mobs at this level 
+// should deal.
+public tuple offense(DamageType dmgType, real cooldown, real range, real dmgBase, real dmgRandom)
+
+// Defensive statistics of enemies. Armor and hitpoints are multipliers of what would be expected at
+// this level.
+public tuple defense(DefenseType defenseType, real armor, real hitpoints, real movespeed)
+
+// === Unit Id Constants ===
+public let kEID_kobold = compiletime(UNIT_ID_GEN.next())
+public let kEID_gnollArcher = compiletime(UNIT_ID_GEN.next())
+public let kEID_spider = compiletime(UNIT_ID_GEN.next())

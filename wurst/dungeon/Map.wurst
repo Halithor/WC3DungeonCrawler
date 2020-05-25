@@ -63,7 +63,7 @@ public class MapRoom
   int distance = 0
   coord point
 
-  // The
+  // The start/finish status of a room
   bool isStart = false
   bool isFinish = false
 

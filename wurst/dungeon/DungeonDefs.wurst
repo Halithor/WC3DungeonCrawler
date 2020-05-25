@@ -1,0 +1,10 @@
+package DungeonDefs
+
+import UnitObjEditing
+import DungeonGlobals
+
+@compiletime
+function defineExitWaygate()
+  new BuildingDefinition(kUID_DungeonExitGate, 'Nway')
+    ..setNeutralBuildingShowsMinimapIcon(false)
+    ..setName("Exit")

@@ -1,0 +1,73 @@
+package EnemyInit
+import EnemyDefinitions
+import EnemyGlobals
+import UnitObjEditing
+import CombatTypes
+
+init
+  defineEnemies()
+
+// Create all the enemy unit definitions from what is in the ENEMIES list
+@compiletime
+function createEnemyUnitDefinitions()
+  defineEnemies()
+  for enemyId in ENEMIES
+    let e = ENEMIES.get(enemyId)
+
+    new UnitDefinition(enemyId, 'nban')
+      ..setNormalAbilities("")
+      ..setAnimationCastBackswing(e.visual.animation.castBack)
+      ..setAnimationCastPoint(e.visual.animation.castPnt)
+      ..setAnimationRunSpeed(e.defense.movespeed)
+      ..setAnimationWalkSpeed(e.defense.movespeed)
+      ..setIconGameInterface(e.visual.icon)
+      ..setModelFile(e.visual.model)
+      ..setScalingValue(e.visual.scale)
+      ..setSelectionScale(e.visual.selection)
+      ..setShadowImageCenterX(e.visual.shadow * 0.4)
+      ..setShadowImageCenterY(e.visual.shadow * 0.4)
+      ..setShadowImageHeight(e.visual.shadow)
+      ..setShadowImageWidth(e.visual.shadow)
+      ..setArmorSoundType(e.defense.defenseType.toArmorSound())
+      ..setAttack1AnimationBackswingPoint(e.visual.animation.atkBack)
+      ..setAttack1AnimationDamagePoint(e.visual.animation.atkPnt)
+      ..setAttack1AttackType(e.offense.dmgType.toCode())
+      ..setAttack1CooldownTime(e.offense.cooldown)
+      ..setAttack1DamageBase(0)
+      ..setAttack1DamageNumberofDice(1)
+      ..setAttack1DamageSidesperDie(1)
+      ..setAttack1ProjectileArc(0.15)
+      ..setAttack1ProjectileHomingEnabled(true)
+      ..setAttack1ProjectileSpeed(900)
+      ..setAttack1Range(e.offense.range.round())
+      ..setAttack1TargetsAllowed(e.offense.range > 128 ? "ground,structure,debris,air,item,ward" : 
+          "ground,structure,debris,item,ward")
+      ..setAttack1WeaponSound(e.offense.range > 128 ? WeaponSound.Nothing : 
+          WeaponSound.MetalLightChop)
+      ..setAttack1WeaponType(e.offense.range > 128 ? WeaponType.Missile : WeaponType.Normal)
+      ..setAttacksEnabled(1)
+      ..setDeathType(e.defense.defenseType.toDeathType())
+      ..setDefenseBase(0)
+      ..setArmorType(e.defense.defenseType.toCode())
+      ..setSpeedBase(e.defense.movespeed.round())
+      ..setCollisionSize(e.visual.selection * 32.0)
+      ..setUnitSoundSet(e.visual.soundset)
+      ..setFoodCost(0)
+      ..setGoldBountyAwardedBase(0)
+      ..setGoldBountyAwardedNumberofDice(0)
+      ..setGoldBountyAwardedSidesperDie(0)
+      ..setGoldCost(0)
+      ..setHitPointsMaximumBase(100)
+      ..setHitPointsRegenerationRate(0)
+      ..setHitPointsRegenerationType("always")
+      ..setLevel(0)
+      ..setRace(Race.Creeps)
+      ..setRepairGoldCost(0)
+      ..setSightRadiusDay(900)
+      ..setSightRadiusNight(900)
+      ..setSleeps(false)
+      ..setName(e.visual.name)
+      ..setTooltipBasic("Recruit " + e.visual.name)
+      ..setTooltipExtended("???")
+
+

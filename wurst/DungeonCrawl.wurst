@@ -1,21 +1,18 @@
 package DungeonCrawl
 
 import HeroSelection
-import Dungeon
-import ClosureEvents
+import LevelSystem
 
 /** The main class for the game */
 public class DungeonCrawl
   HeroSelection heroSelection
-  Dungeon currentDungeon
+  LevelSystem levelSystem
 
   function start()
     heroSelection = new HeroSelection() ->
       print("Hero Selection has finished.", 10)
       print("Generating the Dungeon...", 10)
-      currentDungeon = new Dungeon()
-      EventListener.add(EVENT_PLAYER_UNIT_SPELL_EFFECT) -> 
-        
+      levelSystem = new LevelSystem()
 
   ondestroy
     skip
