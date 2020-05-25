@@ -1,0 +1,38 @@
+package DungeonCreeps
+import Map
+import Grid
+import GroupUtils
+import MapConstants
+import Enemies
+import Execute
+
+public class DungeonCreeps
+  Map map
+  Grid grid
+
+  group units
+
+  construct(Map map, Grid grid)
+    this.map = map
+    this.grid = grid
+    units = getGroup()
+
+  ondestroy
+    for u in units
+      u.remove()
+    units.release()
+
+  function start()
+    // Spawn all the units
+    // for room in map.roomList
+    Log.debug("Creeps for Map of size: " + map.size.toString())
+    Log.debug("Room list size: " + map.roomList.size().toString())
+    for y = 0 to map.size.y - 1
+      for x = 0 to map.size.x - 1
+        execute() ->
+          // TODO: figure out why this is so expensive lol
+          let room = map.getRoom(coord(x, y))
+          Log.debug("Creeps for room " + room.point.toString())
+          let g = spawnRandomEnemies(grid.getGridCell(room.point).area, 1, GetRandomInt(1, 3))
+          units.addGroup(g)
+          g.release()

@@ -1,0 +1,26 @@
+package Enemies
+import AttributeSystem
+import EnemyGlobals
+import GroupUtils
+
+/** Spawn a specific enemy from the enemies system. */
+public function spawnEnemy(int id, vec2 pos, int level) returns unit 
+  let e = ENEMIES.get(id)
+  let stats = e.getStats(level.toReal())
+  let u = createUnit(players[PLAYER_NEUTRAL_AGGRESSIVE], id, pos, GetRandomDirectionDeg().asAngleDegrees())
+      ..initAttributes(stats)
+  destroy stats
+  return u
+
+/** Spawns a bunch of enemies in a rect */
+public function spawnEnemies(int id, rect area, int level, int count) returns group
+  let g = getGroup()
+  for i = 0 to count - 1
+    let u = spawnEnemy(id, area.getCenter() + vec2(GetRandomReal(10, 200), GetRandomReal(10, 200)), 
+      level)
+    g.addUnit(u)
+  return g
+
+public function spawnRandomEnemies(rect area, int level, int count) returns group
+  let id = ENEMY_IDS.get(GetRandomInt(0, ENEMY_IDS.size() - 1))
+  return spawnEnemies(id, area, level, count)

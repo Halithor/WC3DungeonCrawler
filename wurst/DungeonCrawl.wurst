@@ -12,7 +12,7 @@ public class DungeonCrawl
     heroSelection = new HeroSelection() ->
       print("Hero Selection has finished.", 10)
       print("Generating the Dungeon...", 10)
-      levelSystem = new LevelSystem()
+      levelSystem = new LevelSystem()..start()
 
   ondestroy
     skip

@@ -1,5 +1,6 @@
 package Map
 import MapConstants
+import HashList
 
 public class RoomPair
   MapRoom fst 
@@ -71,6 +72,7 @@ public class MapRoom
   bool treasure = false
   // Is there a revive shrine in this room?
   bool shrine = false
+  CreepType creepType = CreepType.Standard
 
   // Doors
   bool isNorthOpen = false
@@ -100,12 +102,21 @@ public class Map
 
   MapRoom array[MAP_ROWS * MAP_COLS] rooms
 
+  // List of rooms
+  HashList<MapRoom> roomList
+
   construct(coord size)
     this.size = size
+    roomList = new HashList<MapRoom>()
     for y = 0 to size.y - 1
       for x = 0 to size.x - 1
-        rooms[(size.x * y) + x] = new MapRoom(coord(x, y))
+        let room = new MapRoom(coord(x, y))
+        rooms[(size.x * y) + x] = room
+        roomList.add(room)
   
+  ondestroy
+    destroy roomList
+
   function getRandomPoint() returns coord
     return coord(GetRandomInt(0, size.x - 1), GetRandomInt(0, size.y - 1))
 

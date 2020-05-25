@@ -21,13 +21,14 @@ function addValidDoor(Map map, MapRoom room, HashSet<Door> doors, Dir dir)
   let point = room.point + dir.toOffset()
   let inMap = map.isPointInMap(point)
   let isUnexplored = inMap ? map.getRoom(point).status == Status.Unexplored : false
-  Log.debug("AddValidDoor of " + point.toString() + " | inMap: " + inMap.toString() + " | isUnexplored: " + isUnexplored.toString())
+  Log.trace("AddValidDoor of " + point.toString() + " | inMap: " + inMap.toString() + 
+      " | isUnexplored: " + isUnexplored.toString())
   if inMap and isUnexplored
-    Log.debug("Valid door found")
+    Log.trace("Valid door found")
     doors.add(new Door(room, dir))
 
 function addAllValidDoors(Map map, MapRoom room, HashSet<Door> doors)
-  Log.debug("Adding valid doors")
+  Log.trace("Adding valid doors")
   addValidDoor(map, room, doors, Dir.North)
   addValidDoor(map, room, doors, Dir.South)
   addValidDoor(map, room, doors, Dir.East)
@@ -53,7 +54,7 @@ function openADoor(Map map, HashSet<MapRoom> rooms, HashSet<Door> doors, Status 
     door.dir.openDoor(door.source)
     door.dir.opposite().openDoor(room)
   else
-    Log.debug("No doors to open")
+    Log.trace("No doors to open")
 
 /** Returns the total distance of two rooms if they are in different halves. */
 function getRoomCombinedDitance(RoomPair pair) returns int
@@ -78,7 +79,7 @@ function testRoomPair(int bestDist, HashSet<RoomPair> pairs, RoomPair testPair) 
   return retDist
 
 function internalGenMap(Map map)
-  Log.debug("Generating map")
+  Log.trace("Generating map")
   // pick a start
   map.start = map.getRandomPoint()
   map.getRoom(map.start).isStart = true
@@ -99,7 +100,7 @@ function internalGenMap(Map map)
   Status last = Status.Unexplored
   while startRooms.size() + finishRooms.size() < map.size.x * map.size.y
     last = last == Status.Start ? Status.Finish : Status.Start
-    Log.debug("Opening: " + (last == Status.Start ? "Start" : "Finish") + " | " + 
+    Log.trace("Opening: " + (last == Status.Start ? "Start" : "Finish") + " | " + 
       startRooms.size().toString() + "+" + finishRooms.size().toString() + "<" + 
       (map.size.x * map.size.y).toString())
     if last == Status.Start
@@ -112,7 +113,7 @@ function internalGenMap(Map map)
     finishDoors = buildDoorSet(map, finishRooms)
 
   // compile pairs of adjacent rooms, one from each set, to find the greatest distance.
-  Log.debug("Connecting halves")
+  Log.trace("Connecting halves")
   var bestDist = -1
   let pairs = new HashSet<RoomPair>()
   for y = 0 to map.size.y - 1
@@ -126,12 +127,14 @@ function internalGenMap(Map map)
         let testPair = new RoomPair(map.getRoom(coord(x, y)), map.getRoom(coord(x - 1, y)))
         bestDist = testRoomPair(bestDist, pairs, testPair)
   // Pairs now contains all equally greatest length pairs. Pick one randomly and open
-  Log.debug("Found " + pairs.size().toString() + " pairs of rooms with distance " + bestDist.toString())
+  Log.trace("Found " + pairs.size().toString() + " pairs of rooms with distance " + 
+      bestDist.toString())
   let connection = pairs.get(GetRandomInt(0, pairs.size() -1))
   connection.getDir().openDoor(connection.fst)
   connection.getDir().opposite().openDoor(connection.scd)
   
-  // OPTIONAL: reposition the finish to be farthest away from it's current location, in it's set, not on the start path.
+  // OPTIONAL: reposition the finish to be farthest away from it's current location, in it's set, 
+  // not on the start path.
   
 public class MapGenerator
   Map map

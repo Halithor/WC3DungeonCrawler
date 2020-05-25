@@ -3,9 +3,9 @@ import Attributes
 import HashList
 
 @config constant lifeMaxPerStr = 12.0
-@config constant lifeRegenPerStr = 0.2
+@config constant lifeRegenPerStr = 0.02
 @config constant manaMaxPerInt = 4.0
-@config constant manaRegenPerInt = 0.06
+@config constant manaRegenPerInt = 0.04
 @config constant armorPerAgi = (1.0 / 7.0)
 @config constant atkSpdPerAgi = 0.01
 @config constant movespeedPerAgi = 1.0

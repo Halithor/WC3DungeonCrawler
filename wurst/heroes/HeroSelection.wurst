@@ -100,7 +100,9 @@ public class HeroSelection
           sold.setPos(place)
           p.selectSingle(sold)
           p.setCameraPosition(place)
-          sold.initAttributes(heroEntry.getStartingHeroStats())
+          let stats = heroEntry.getStartingHeroStats()
+          sold.initAttributes(stats)
+          destroy stats
           sold.setProperName(p.getName())
           forUnitsInRect(gg_rct_Selection) (unit u) ->
             if u.getOwner() == p

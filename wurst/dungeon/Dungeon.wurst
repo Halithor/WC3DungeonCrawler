@@ -3,6 +3,8 @@ import Map
 import Grid
 import MapConstants
 import MapGen
+import DungeonCreeps
+import Execute
 
 // Track the most recent dungeon for the enter trigger.
 Dungeon lastDungeon
@@ -14,18 +16,27 @@ Dungeon lastDungeon
 public class Dungeon 
   Map map
   Grid grid
+  DungeonCreeps creeps
 
   construct()
     lastDungeon = this
+    Log.debug("Creating map...")
     map = new Map(coord(5,5))
-    let generator = new MapGenerator(map)..generateMap()
+    Log.debug("Generating map...")
+    let generator = new MapGenerator(map)
+    execute(() -> generator.generateMap())
     destroy generator
+    Log.debug("Applying to grid...")
     grid = new Grid()
     grid.applyMapToGrid(map)
+    Log.debug("Spawning creeps...")
+    creeps = new DungeonCreeps(map, grid)
+    creeps.start()
 
   ondestroy
     destroy map
     destroy grid
+    destroy creeps
 
   // Move the unit into the dungeon.
   function enterUnit(unit u)

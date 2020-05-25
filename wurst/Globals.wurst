@@ -5,6 +5,8 @@ public interface Callback
 
 // 6 players in game.
 public let MAX_PLAYER_NUMBER = 5
+public let PLAYER_VILLAGE =players[9]
+public let PLAYER_ENEMY = players[12]
 
 public function getPlayersIngame() returns int
   int count = 0

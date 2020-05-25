@@ -63,7 +63,7 @@ public class GridCell
     // setGateState(gate_south, room.isSouthOpen)
     // setGateState(gate_east, room.isEastOpen)
     // setGateState(gate_west, room.isWestOpen)
-    text = createTTEx(center.toVec3(), room.toString(), 14)
+    text = createTTEx(center.toVec3(), room.toString(), 8)
  
 
 

@@ -2,16 +2,17 @@ package EnemyDefinitions
 import EnemyGlobals
 import Assets
 import CombatTypes
+import EnemyIds
 
 // Function that has all enemy definitions in it.
 public function defineEnemies()
   new Enemy(kEID_kobold, Rarity.Common,
-      visual("Kobold", Units.kobold1, Icons.bTNKobold, Soundsets.kobold, 1.0, 1, 80, "", 
+      visual("Kobold", Icons.bTNKobold, Units.kobold1, Soundsets.kobold, 1.0, 1, 80, "", 
           ANIMATION_STND),
       offense(DamageType.Physical, 2, 70, 1, 0.25),
       defense(DefenseType.Flesh, 1.0, 0.7, 300))
   new Enemy(kEID_gnollArcher, Rarity.Common, 
-      visual("Gnoll Marksman", Units.gnollArcher, Icons.bTNGnollArcher, Soundsets.gnollArcher, 1.0, 
+      visual("Gnoll Marksman", Icons.bTNGnollArcher, Units.gnollArcher, Soundsets.gnollArcher, 1.0, 
           1.0, 80, Abilities.arrowMissile1, ANIMATION_STND), 
       offense(DamageType.Physical, 2.2, 500, 1.0, 0.4), 
       defense(DefenseType.Flesh, 0.5, 0.5, 320))

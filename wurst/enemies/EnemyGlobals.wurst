@@ -1,7 +1,8 @@
 package EnemyGlobals
 import CombatTypes
 import HashMap
-import ObjectIdGenerator
+import Attributes
+import HashSet
 
 enum Rarity
   Common
@@ -13,6 +14,9 @@ enum Rarity
 // A decent animation starting point.
 public let ANIMATION_STND = animation(0.5, 0.5, 0.5, 0.5)
 
+// Set of all IDs for enemies, for random selection
+public let ENEMY_IDS = new HashSet<int>()
+// Map of all enemy definitions
 public let ENEMIES = new IterableMap<int, Enemy>()
 
 // The statistics that make up an enemy. Needs to be a class for tuple storage.
@@ -29,7 +33,23 @@ public class Enemy
     this.visual = visual
     this.offense = offense
     this.defense = defense
+    ENEMY_IDS.add(unitId)
     ENEMIES.put(unitId, this)
+
+  function getStats(real level) returns IterableMap<AttributeId, int>
+    let dmg = damage(level, offense)
+    return new IterableMap<AttributeId, int>()
+      ..put(ATR_LIFE_MAX_FLAT, life(level, defense.hitpoints))
+      ..put(ATR_LIFE_REGEN_FLAT, lifeRegen(level, 1.0))
+      // TODO: Mana for enemies
+      ..put(ATR_MANA_MAX_FLAT, 0)
+      ..put(ATR_MANA_REGEN_FLAT, 0)
+      ..put(ATR_ARMOR_FLAT, armor(level, defense.armor))
+      ..put(ATR_ATK_CD_FLAT, (offense.cooldown * 100).round())
+      ..put(ATR_ATK_DMG_FLAT, dmg.damage)
+      ..put(ATR_ATK_DICE_FLAT, dmg.dice)
+      ..put(ATR_ATK_DICE_SIDES_FLAT, dmg.diceSides)
+      ..put(ATR_MOVESPEED_FLAT, defense.movespeed.round())
 
 // The visual representation of an enemy
 public tuple visual(string name, string icon, string model, string soundset, real selection, 
@@ -46,7 +66,30 @@ public tuple offense(DamageType dmgType, real cooldown, real range, real dmgBase
 // this level.
 public tuple defense(DefenseType defenseType, real armor, real hitpoints, real movespeed)
 
-// === Unit Id Constants ===
-public let kEID_kobold = compiletime(UNIT_ID_GEN.next())
-public let kEID_gnollArcher = compiletime(UNIT_ID_GEN.next())
-public let kEID_spider = compiletime(UNIT_ID_GEN.next())
+// Stores the absolute calulated damage
+tuple attackDamage(int damage, int dice, int diceSides)
+// === Balancing curves for enemy strength ===
+
+function life(real level, real unitScalar) returns int
+  return (((level * level * 10) + (level * 20) + 20) * unitScalar * GetRandomReal(0.9, 1.1)).round()
+
+function lifeRegen(real level, real unitScalar) returns int
+  return ((level * unitScalar) * 100).round()
+
+function armor(real level, real unitScalar) returns int
+  return ((((level / 10).floor() * 5) + (level * 2)) * unitScalar).round() 
+
+// This calculates attack damage traits based on a goal DPS from the CD
+function damage(real level, offense offense) returns attackDamage
+  // The goal DPS based on level.
+  let goalDps = ((level * SquareRoot(level)) * 2 + 5) * offense.dmgBase * GetRandomReal(0.9, 1.1)
+  // formula for average damage per attack:
+  //   dmg = base + ((sides + 1) / 2) * diceCount
+  let averageAttackDamage = (goalDps / offense.cooldown).round()
+  let dmgBase = (averageAttackDamage * (1.0 - offense.dmgRandom)).round()
+  let dmgRandom = averageAttackDamage - dmgBase
+  // pick the sides randomly + based on the random damage desired
+  let diceSides = (dmgRandom / 15).floor() + GetRandomInt(5, 8)
+  // calculate count from sides and desired damage
+  let diceCount = max((dmgRandom / ((diceSides + 1) / 2)).round(), 1)
+  return attackDamage(dmgBase, diceCount, diceSides)

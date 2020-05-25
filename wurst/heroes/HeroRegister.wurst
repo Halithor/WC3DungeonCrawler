@@ -70,6 +70,7 @@ public class HeroEntry
       ..setAttack1AttackType(combat.damageType.toCode())
       ..setArmorType(combat.defenseType.toCode())
       ..setDefenseBase(0)
+      ..setCollisionSize(31.0)
       ..setUnitSoundSet(visuals.voice)
       ..setPrimaryAttribute(primary.toCode())
       ..setName(getName())
@@ -95,7 +96,7 @@ public class HeroEntry
     ..put(ATR_MANA_MAX_FLAT, attrs.mana)
     ..put(ATR_MANA_REGEN_FLAT, 0)
     ..put(ATR_ARMOR_FLAT, attrs.armor)
-    ..put(ATR_ATK_CD_FLAT, (combat.cooldown * 10.0).round()) // 2.5 seconds
+    ..put(ATR_ATK_CD_FLAT, (combat.cooldown * 100.0).round()) // 2.5 seconds
     ..put(ATR_ATK_DMG_FLAT, combat.baseDamage)
     ..put(ATR_ATK_DICE_FLAT, combat.diceCount)
     ..put(ATR_ATK_DICE_SIDES_FLAT, combat.diceSides)
